@@ -116,6 +116,8 @@ export default class SubscriptionManager {
                     subscribeRetryIntervalInSeconds * 1000));
                 }
               }
+            } else {
+              this._logger.error(`${instanceId}: Failed to subscribe`, err);
             }
           }
           resolveSubscribe();

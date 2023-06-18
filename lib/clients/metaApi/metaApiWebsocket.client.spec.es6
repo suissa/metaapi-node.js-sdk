@@ -4,6 +4,7 @@ import should from 'should';
 import sinon from 'sinon';
 import MetaApiWebsocketClient from './metaApiWebsocket.client';
 import Server from 'socket.io';
+import {ForbiddenError} from '../errorHandler';
 
 /**
  * @test {MetaApiWebsocketClient}
@@ -3352,6 +3353,34 @@ describe('MetaApiWebsocketClient', () => {
     client.queueEvent('accountId', 'test', event);
     await new Promise(res => setTimeout(res, 10));
     sinon.assert.calledOnce(event);
+  });
+
+  /**
+   * @test {MetaApiWebsocketClient#rpcRequest}
+   */
+  describe('rpcRequest', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#rpcRequest}
+     */
+    it('should convert ForbiddenError to corresponding error class', async () => {
+      server.on('request', data => {
+        if (data.type === 'getAccountInformation' && data.accountId === 'accountId' && data.application === 'RPC') {
+          server.emit('processingError', {error: 'ForbiddenError', message: 'test', requestId: data.requestId});
+        }
+      });
+      try {
+        await client.getAccountInformation('accountId');
+        should.fail();
+      } catch (err) {
+        err.should.be.instanceof(ForbiddenError);
+        err.should.match({
+          name: 'ForbiddenError',
+          message: 'test'
+        });
+      }
+    });
+
   });
 
 });
