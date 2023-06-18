@@ -3,7 +3,8 @@
 import randomstring from 'randomstring';
 import socketIO from 'socket.io-client';
 import TimeoutError from '../timeoutError';
-import {ValidationError, NotFoundError, InternalError, UnauthorizedError, TooManyRequestsError} from '../errorHandler';
+import {ValidationError, NotFoundError, InternalError, UnauthorizedError, TooManyRequestsError, ForbiddenError}
+  from '../errorHandler';
 import OptionsValidator from '../optionsValidator';
 import NotSynchronizedError from './notSynchronizedError';
 import NotConnectedError from './notConnectedError';
@@ -1586,6 +1587,8 @@ export default class MetaApiWebsocketClient {
       return new TimeoutError(data.message);
     } else if (data.error === 'NotAuthenticatedError') {
       return new NotConnectedError(data.message);
+    } else if (data.error === 'ForbiddenError') {
+      return new ForbiddenError(data.message);
     } else if (data.error === 'TradeError') {
       return new TradeError(data.message, data.numericCode, data.stringCode);
     } else if (data.error === 'UnauthorizedError') {

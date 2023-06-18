@@ -1,3 +1,7 @@
+23.1.1
+  - fixed converting ForbiddenError to InternalError for websocket requests
+  - log subscription errors
+
 23.1.0
  - updated CopyFactory SDK
 
