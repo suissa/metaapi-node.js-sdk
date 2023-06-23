@@ -1,3 +1,6 @@
+23.2.0
+ - added `TokenManagementApi` and `TokenManagementClient` to generate web/mobile app tokens based on admin API access token
+
 23.1.1
   - fixed converting ForbiddenError to InternalError for websocket requests
   - log subscription errors

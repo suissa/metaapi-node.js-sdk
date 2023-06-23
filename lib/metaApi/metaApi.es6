@@ -18,6 +18,8 @@ import ExpertAdvisorClient from '../clients/metaApi/expertAdvisor.client';
 import LoggerManager from '../logger';
 import DomainClient from '../clients/domain.client';
 import TerminalHashManager from './terminalHashManager';
+import TokenManagementClient from '../clients/metaApi/tokenManagement.client';
+import TokenManagementApi from './tokenManagementApi';
 
 /**
  * Request retry options
@@ -103,6 +105,7 @@ export default class MetaApi {
     const historicalMarketDataHttpClient = new HttpClient(historicalMarketDataRequestTimeout, retryOpts);
     const accountGeneratorHttpClient = new HttpClient(accountGeneratorRequestTimeout, retryOpts);
     const clientApiClient = new ClientApiClient(httpClient, domainClient); 
+    const tokenManagmentClient = new TokenManagementClient(httpClient, domainClient); 
     this._terminalHashManager = new TerminalHashManager(clientApiClient, opts.keepHashTrees);
     this._metaApiWebsocketClient = new MetaApiWebsocketClient(domainClient, token,
       {application, domain,
@@ -118,6 +121,7 @@ export default class MetaApi {
       new ExpertAdvisorClient(httpClient, domainClient), historicalMarketDataClient, application);
     this._metatraderAccountGeneratorApi = new MetatraderAccountGeneratorApi(
       new MetatraderAccountGeneratorClient(accountGeneratorHttpClient, domainClient));
+    this._tokenManagementApi = new TokenManagementApi(tokenManagmentClient);
     if (opts.enableLatencyTracking || opts.enableLatencyMonitor) {
       this._latencyMonitor = new LatencyMonitor();
       this._metaApiWebsocketClient.addLatencyListener(this._latencyMonitor);
@@ -154,6 +158,14 @@ export default class MetaApi {
    */
   get latencyMonitor() {
     return this._latencyMonitor;
+  }
+
+  /**
+   * Returns token management API
+   * @returns {TokenManagementApi} token management API
+   */
+  get tokenManagementApi() {
+    return this._tokenManagementApi;
   }
 
   /**

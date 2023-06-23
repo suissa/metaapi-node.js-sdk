@@ -88,3 +88,5 @@ Alternatively, you can retrieve account access token via web UI on https://app.m
 9. [Enable log4js logging](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/logging.md)
 
 10. [Rate limits & quotas](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/rateLimits.md)
+
+11. [Token Management API](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/tokenManagementApi.md)
