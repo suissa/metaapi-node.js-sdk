@@ -1,3 +1,6 @@
+23.2.1
+ - updated `TokenManagementApi` documentation
+
 23.2.0
  - added `TokenManagementApi` and `TokenManagementClient` to generate web/mobile app tokens based on admin API access token
 

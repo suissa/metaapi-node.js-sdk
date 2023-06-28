@@ -61,7 +61,7 @@ try {
   // restrict web app token with read-only access for MetaApi REST API for specific trading account only
   const narrowedDownToken = await api.tokenManagementApi.narrowDownToken(
     {
-      applications: ['metaapi-rest-api'],
+      applications: ['metaapi-api'],
       roles: ['reader'],
       resources: [{entity: 'account', id: '3860c395-6842-43d9-9b6a-9f9841bb2c8a'}]
     }, 
@@ -85,13 +85,15 @@ const narrowedDownToken = await api.tokenManagementApi.narrowDownToken({
       service: 'rest',
       resources: [{entity: 'account', id: '3860c395-6842-43d9-9b6a-9f9841bb2c8a'}],
       methodGroups: [{group: 'account-management', methods: [{method: 'getAccount'}]}],
+      roles: ['reader']
     },
     {
       id: 'mt-manager-api',
       application: 'mt-manager-api',
       service: 'rest',
       resources: [{entity: 'mt-manager', id: 'c55da8ff-c177-4236-bf4c-a832a67c6ab3'}],
-      methodGroups: [{group: '*', methods: [{method: '*', scopes: ['dealing', 'public']}]}]
+      methodGroups: [{group: '*', methods: [{method: '*', scopes: ['dealing', 'public']}]}],
+      roles: ['reader']
     }],
     validityInHours
 });
