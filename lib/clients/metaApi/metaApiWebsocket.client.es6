@@ -378,9 +378,7 @@ export default class MetaApiWebsocketClient {
       // eslint-disable-next-line no-console
       this._logger.error(`${region}:${instanceNumber}: MetaApi websocket client connection error`, err);
       instance.isReconnecting = false;
-      if (!instance.resolved) {
-        await this._reconnect(instanceNumber, instance.id, region);
-      }
+      await this._reconnect(instanceNumber, instance.id, region);
     });
     socketInstance.on('connect_timeout', async (timeout) => {
       // eslint-disable-next-line no-console

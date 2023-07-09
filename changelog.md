@@ -1,3 +1,6 @@
+23.2.2
+  - fixed reconnecting if the server url has changed
+
 23.2.1
  - updated `TokenManagementApi` documentation
 
