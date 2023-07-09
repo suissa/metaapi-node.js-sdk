@@ -1,4 +1,5 @@
-import MetaApiClient from "../metaApi.client"
+import MetaApiClient from "../metaApi.client";
+import { Buffer } from "buffer";
 
 /**
  * metaapi.cloud expert advisor API client (see https://metaapi.cloud/docs/provisioning/)

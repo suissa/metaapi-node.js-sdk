@@ -212,4 +212,4 @@ var AVLTree = function(comparer) {
   return AVL;
 }
 
-module.exports = AVLTree;
+export default AVLTree;

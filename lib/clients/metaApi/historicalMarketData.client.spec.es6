@@ -80,7 +80,7 @@ describe('HistoricalMarketDataClient', () => {
       url: `${marketDataClientApiUrl}/users/current/accounts/accountId/historical-market-data/symbols/AUDNZD/` +
         'timeframes/15m/candles',
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-04-07T03:45:00.000Z'),
         limit: 1
       },
@@ -116,7 +116,7 @@ describe('HistoricalMarketDataClient', () => {
       url: `${marketDataClientApiUrl}/users/current/accounts/accountId/historical-market-data/symbols/GBPJPY%23/` +
           'timeframes/15m/candles',
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-04-07T03:45:00.000Z'),
         limit: 1
       },
@@ -148,7 +148,7 @@ describe('HistoricalMarketDataClient', () => {
     sinon.assert.calledWith(httpClient.request, {
       url: `${marketDataClientApiUrl}/users/current/accounts/accountId/historical-market-data/symbols/AUDNZD/ticks`,
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-04-07T03:45:00.000Z'),
         offset: 0,
         limit: 1
@@ -181,7 +181,7 @@ describe('HistoricalMarketDataClient', () => {
     sinon.assert.calledWith(httpClient.request, {
       url: `${marketDataClientApiUrl}/users/current/accounts/accountId/historical-market-data/symbols/GBPJPY%23/ticks`,
       method: 'GET',
-      qs: {
+      params: {
         startTime: new Date('2020-04-07T03:45:00.000Z'),
         offset: 0,
         limit: 1

@@ -98,8 +98,10 @@ describe('HttpClient#request', () => {
       it('should retry request on fail with ApiError error', async () => {
         stub.onFirstCall().rejects(new ApiError(ApiError, 'test'))
           .onSecondCall().rejects(new ApiError(ApiError, 'test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
+
         clock.tickAsync(5000);
+
         const response = await httpClient.request(opts);
         response.should.match('response');
         sinon.assert.calledThrice(stub);
@@ -111,7 +113,7 @@ describe('HttpClient#request', () => {
       it('should retry request on fail with InternalError error', async () => {
         stub.onFirstCall().rejects(new InternalError('test'))
           .onSecondCall().rejects(new InternalError('test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response'});
         clock.tickAsync(5000);
         const response = await httpClient.request(opts);
         response.should.match('response');
@@ -173,7 +175,7 @@ describe('HttpClient#request', () => {
       it('should retry request after waiting on fail with TooManyRequestsError error', async () => {
         stub.onFirstCall().rejects(getTooManyRequestsError(2))
           .onSecondCall().rejects(getTooManyRequestsError(3))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         clock.tickAsync(5000);
         const response = await httpClient.request(opts);
         response.should.eql('response');
@@ -204,7 +206,7 @@ describe('HttpClient#request', () => {
       it('should not count retrying TooManyRequestsError error', async () => {
         stub.onFirstCall().rejects(getTooManyRequestsError(1))
           .onSecondCall().rejects(new ApiError(ApiError, 'test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         httpClient = new HttpClientMock(stub, 60, {retries: 1});
         clock.tickAsync(5000);
         const response = await httpClient.request(opts);
@@ -224,8 +226,8 @@ describe('HttpClient#request', () => {
        */
       it('should wait for the retry-after header time before retrying', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 3}, statusCode: 202});
-        }).onThirdCall().resolves('response');
+          options.callback(null, {headers: {'retry-after': 3}, status: 202});
+        }).onThirdCall().resolves({ data: 'response' });
         clock.tickAsync(5000);
         const response = await httpClient.request(opts);
         response.should.eql('response');
@@ -238,8 +240,8 @@ describe('HttpClient#request', () => {
       it('should wait for the retry-after header time before retrying if header is in http time', async () => {
         stub.callsFake((options) => {
           options.callback(null, {headers: {'retry-after': 'Mon, 05 Oct 2020 07:00:02 GMT'}, 
-            statusCode: 202});
-        }).onThirdCall().resolves('response');
+            status: 202});
+        }).onThirdCall().resolves({ data: 'response' });
         clock.tickAsync(3000);
         const response = await httpClient.request(opts);
         response.should.eql('response');
@@ -251,7 +253,10 @@ describe('HttpClient#request', () => {
        */
       it('should return TimeoutError error if retry-after header time is too long', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 30}, statusCode: 202});
+          options.callback(null, {
+            headers: { 'retry-after': 30 }, 
+            status: 202
+          });
         });
         httpClient = new HttpClientMock(stub, 60, {maxDelayInSeconds: 3, longRunningRequestTimeoutInMinutes: 0.25});
         try {
@@ -269,7 +274,10 @@ describe('HttpClient#request', () => {
        */
       it('should return TimeoutError error if timed out to retry', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 1}, statusCode: 202});
+          options.callback(null, {
+            headers: {'retry-after': 1}, 
+            status: 202
+          });
         });
         httpClient = new HttpClientMock(stub, 60, {maxDelayInSeconds: 2, retries: 3, 
           longRunningRequestTimeoutInMinutes: 0.1});
@@ -283,9 +291,6 @@ describe('HttpClient#request', () => {
         }
         sinon.assert.callCount(stub, 6);
       }).timeout(10000);
-
     });
-
   });
-
 });

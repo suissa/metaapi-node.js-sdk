@@ -15,7 +15,7 @@ export default class TerminalHashManager {
    * @param {String} region account region
    * @returns {Promise} promise resolving when the hashing field lists are updated.
    */
-  refreshIgnoredFieldLists(region: string): Promise;
+  refreshIgnoredFieldLists(region: string): Promise<any>;
 
   /**
    * Returns specifications data by hash

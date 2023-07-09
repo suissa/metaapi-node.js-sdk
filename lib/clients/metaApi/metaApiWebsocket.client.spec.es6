@@ -59,7 +59,9 @@ describe('MetaApiWebsocketClient', () => {
     });
     client.url = 'http://localhost:6784';
     client._socketInstances = {'vint-hill': {0: [], 1: []}, 'new-york': {0: []}};
+    
     io = new Server(6784, {path: '/ws', pingTimeout: 1000000});
+
     io.on('connect', socket => {
       server = socket;
       if (socket.request._query['auth-token'] !== 'token') {

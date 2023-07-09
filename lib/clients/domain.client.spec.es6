@@ -3,6 +3,7 @@
 import HttpClient from './httpClient';
 import sinon from 'sinon';
 import DomainClient from './domain.client';
+import should from 'should';
   
 /**
  * @test {DomainClient}
@@ -19,11 +20,11 @@ describe('DomainClient', () => {
   let sandbox;
   let requestStub;
   let clock;
- 
+
   before(() => {
     sandbox = sinon.createSandbox();
   });
- 
+
   beforeEach(() => {
     domainClient = new DomainClient(httpClient, token);
     expected = 'https://mt-client-api-v1.vint-hill.agiliumtrade.ai';
@@ -38,12 +39,12 @@ describe('DomainClient', () => {
       now: new Date('2020-10-05T07:00:00.000Z')
     });
   });
- 
+
   afterEach(() => {
     sandbox.restore();
     clock.restore();
   });
- 
+
   /**
    * @test {DomainClient#getUrl}
    */

@@ -30,7 +30,8 @@
     "extends": ["eslint:recommended", "plugin:mocha/recommended"],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 8,
+        "allowImportExportEverywhere": true,
+        "ecmaVersion": 11,
         "ecmaFeatures": {
             "impliedStrict": true
         }

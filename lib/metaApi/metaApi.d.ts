@@ -4,6 +4,7 @@ import MetatraderAccountGeneratorApi from "./metatraderAccountGeneratorApi"
 import LatencyMonitor from "./latencyMonitor"
 import { SynchronizationThrottlerOpts } from "../clients/metaApi/synchronizationThrottler"
 import { PacketLoggerOpts } from "../clients/metaApi/packetLogger"
+import TokenManagementApi from "./tokenManagementApi"
 
 /**
  * MetaApi MetaTrader API SDK
@@ -46,6 +47,12 @@ export default class MetaApi {
    * @return {LatencyMonitor} latency monitor
    */
   get latencyMonitor(): LatencyMonitor;
+
+  /**
+   * Returns token management API
+   * @returns {TokenManagementApi} token management API
+   */
+  get tokenManagementApi(): TokenManagementApi;
 
   /**
    * Closes all clients and connections and stops all internal jobs

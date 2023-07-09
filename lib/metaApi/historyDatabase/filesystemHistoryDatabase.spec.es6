@@ -47,6 +47,8 @@ describe('FilesystemHistoryDatabase', () => {
     await fs.promises.writeFile(path.join('.metaapi', 'accountId-MetaApi-deals.bin'), dealsData, 'utf-8');
     await fs.promises.writeFile(path.join('.metaapi', 'accountId-MetaApi-historyOrders.bin'), historyOrdersData,
       'utf-8');
+    
+    
     let {deals, historyOrders} = await db.loadHistory('accountId', 'MetaApi');
     deals.should.match([{id: '1'}, {id: '2'}]);
     historyOrders.should.match([{id: '2'}, {id: '3'}]);

@@ -69,7 +69,7 @@ export default class EquityTrackingClient {
     return this._domainClient.requestApi({
       url: `/users/current/accounts/${accountId}/trackers`,
       method: 'POST',
-      body: tracker
+      data: tracker
     });
   }
 
@@ -131,7 +131,7 @@ export default class EquityTrackingClient {
     return this._domainClient.requestApi({
       url: `/users/current/accounts/${accountId}/trackers/${id}`,
       method: 'PUT',
-      body: update
+      data: update
     });
   }
 
@@ -193,7 +193,7 @@ export default class EquityTrackingClient {
   getTrackerEvents(startBrokerTime, endBrokerTime, accountId, trackerId, limit) {
     return this._domainClient.requestApi({
       url: '/users/current/tracker-events/by-broker-time',
-      qs: {startBrokerTime, endBrokerTime, accountId, trackerId, limit},
+      params: {startBrokerTime, endBrokerTime, accountId, trackerId, limit},
       method: 'GET'
     });
   }
@@ -253,7 +253,7 @@ export default class EquityTrackingClient {
   getTrackingStatistics(accountId, trackerId, startTime, limit, realTime = false) {
     return this._domainClient.requestApi({
       url: `/users/current/accounts/${accountId}/trackers/${trackerId}/statistics`,
-      qs: {startTime, limit, realTime},
+      params: {startTime, limit, realTime},
       method: 'GET'
     });
   }
@@ -307,14 +307,15 @@ export default class EquityTrackingClient {
   async getEquityChart(accountId, startTime, endTime, realTime = false, fillSkips = false) {
     const records = await this._domainClient.requestApi({
       url: `/users/current/accounts/${accountId}/equity-chart`,
-      qs: {startTime, endTime, realTime},
+      params: {startTime, endTime, realTime},
       method: 'GET'
     });
     if(fillSkips){
       let i = 0;
       while(i < records.length - 1) {
         const timeDiff = new Date(records[i + 1].startBrokerTime).getTime() - 
-           new Date(records[i].startBrokerTime).getTime();
+        new Date(records[i].startBrokerTime).getTime();
+        
         if(timeDiff > 60 * 60 * 1000 && records[i].lastBalance !== undefined) {
           const recordCopy = JSON.parse(JSON.stringify(records[i]));
           recordCopy.minEquity = recordCopy.lastEquity;

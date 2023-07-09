@@ -102,22 +102,22 @@ export default class MemoryHistoryStorage extends HistoryStorage {
    * @param {string} id ticket id
    * @returns {Array<MetatraderDeal>} deals found
    */
-  getDealsByTicket(id): Array<MetatraderDeal>;
+  getDealsByTicket(id: string): Array<MetatraderDeal>;
 
   /**
    * Returns deals by position id
    * @param {string} positionId position id
    * @returns {Array<MetatraderDeal>} deals found
    */
-  getDealsByPosition(positionId): Array<MetatraderDeal>;
+  getDealsByPosition(positionId: string): Array<MetatraderDeal>;
 
   /**
    * Returns deals by time range
    * @param startTime start time, inclusive
    * @param endTime end time, inclusive
    * @returns {Array<MetatraderDeal>} deals found
-   */
-  getDealsByTimeRange(startTime, endTime): Array<MetatraderDeal>;
+  */
+  getDealsByTimeRange(startTime: Date, endTime: Date): Array<MetatraderDeal>;
 
   /**
    * Returns all history orders stored in history storage
@@ -130,14 +130,14 @@ export default class MemoryHistoryStorage extends HistoryStorage {
    * @param {string} id ticket id
    * @returns {Array<MetatraderOrder>} history orders found
    */
-  getHistoryOrdersByTicket(id): Array<MetatraderOrder>;
+  getHistoryOrdersByTicket(id: string): Array<MetatraderOrder>;
 
   /**
    * Returns history orders by position id
    * @param {string} positionId position id
    * @returns {Array<MetatraderOrder>} history orders found
    */
-  getHistoryOrdersByPosition(positionId): Array<MetatraderOrder>;
+  getHistoryOrdersByPosition(positionId: string): Array<MetatraderOrder>;
 
   /**
    * Returns history orders by time range
@@ -145,6 +145,6 @@ export default class MemoryHistoryStorage extends HistoryStorage {
    * @param endTime end time, inclusive
    * @returns {Array<MetatraderOrder>} hisotry orders found
    */
-  getHistoryOrdersByTimeRange(startTime, endTime): Array<MetatraderOrder>;
+  getHistoryOrdersByTimeRange(startTime: Date, endTime: Date): Array<MetatraderOrder>;
 
 }

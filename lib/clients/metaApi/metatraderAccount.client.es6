@@ -165,7 +165,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
     const opts = {
       url: `${this._host}/users/current/accounts`,
       method: 'GET',
-      qs: accountsFilter,
+      params: accountsFilter,
       headers: {
         'auth-token': this._token
       },
@@ -286,7 +286,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
    * this account. Required for cloud account
    * @property {string} [login] MetaTrader account login. Only digits are allowed
    * @property {string} [password] MetaTrader account password. The password can be either investor password for read-only
-   * access or master password to enable trading features.
+   * access or provider password to enable trading features.
    * @property {string} server MetaTrader server name to connect to 
    * @property {Platform} [platform] MetaTrader platform
    * @property {Type} [type] Account type. Executing accounts as cloud-g2 is faster and cheaper. 
@@ -330,7 +330,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
         'transaction-id': randomstring.generate(32)
       },
       json: true,
-      body: account
+      data: account
     };
     return this._httpClient.request(opts, 'createAccount');
   }
@@ -386,7 +386,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
         'transaction-id': randomstring.generate(32)
       },
       json: true,
-      body: account
+      data: account
     };
     return this._httpClient.request(opts, 'createAccountReplica');
   }
@@ -581,7 +581,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
    * @typedef {Object} MetatraderAccountUpdateDto
    * @property {string} name Human-readable account name
    * @property {string} [password] MetaTrader account password. The password can be either investor password for read-only
-   * access or master password to enable trading features
+   * access or provider password to enable trading features
    * @property {string} server MetaTrader server name to connect to
    * @property {number} [magic] Magic value the trades should be performed using.
    * When manualTrades field is set to true, magic value must be 0
@@ -626,7 +626,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: account
+      data: account
     };
     return this._httpClient.request(opts, 'updateAccount');
   }
@@ -673,7 +673,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: metatraderAccount
+      data: metatraderAccount
     };
     return this._httpClient.request(opts, 'updateAccountReplica');
   }
@@ -775,7 +775,7 @@ export default class MetatraderAccountClient extends MetaApiClient {
       headers: {
         'auth-token': this._token
       },
-      qs: {
+      params: {
         ttlInDays: ttlInDays
       },
       json: true

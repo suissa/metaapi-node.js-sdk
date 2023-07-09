@@ -693,7 +693,7 @@ export declare type NewMetatraderAccountDto = {
 
   /**
    * MetaTrader account password. The password can be either investor password for read-only
-   * access or master password to enable trading features. Required for cloud account
+   * access or provider password to enable trading features. Required for cloud account
    */
   password?: string,
 
@@ -836,7 +836,7 @@ export declare type MetatraderAccountUpdateDto = {
 
   /**
    * MetaTrader account password. The password can be either investor password for read-only
-   * access or master password to enable trading features
+   * access or provider password to enable trading features
    */
   password?: string,
 

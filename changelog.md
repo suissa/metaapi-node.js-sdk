@@ -1,3 +1,7 @@
+23.3.0
+ - refactored build to support ESM, UMD, CJS
+ - added examples of usage with Angular, React, and Vue applications
+
 23.2.2
   - fixed reconnecting if the server url has changed
 

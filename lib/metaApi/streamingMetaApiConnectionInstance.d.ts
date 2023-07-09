@@ -102,7 +102,7 @@ export default class StreamingMetaApiConnectionInstance extends MetaApiConnectio
    * @param {SynchronizationOptions} opts synchronization options
    * @return {Promise} promise which resolves when synchronization to MetaTrader terminal is completed
    */
-  waitSynchronized(opts: SynchronizationOptions): Promise<any>;
+  waitSynchronized(opts?: SynchronizationOptions): Promise<any>;
 
   /**
    * Queues an event for processing among other synchronization events within same account

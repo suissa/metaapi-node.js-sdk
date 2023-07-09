@@ -3,7 +3,7 @@ import HistoryStorage from "./metaApi/historyStorage";
 import MemoryHistoryStorage from "./metaApi/memoryHistoryStorage";
 import SynchronizationListener from "./clients/metaApi/synchronizationListener";
 import MetaStats from 'metaapi.cloud-metastats-sdk';
-import CopyFactory, { StopoutListener } from "metaapi.cloud-copyfactory-sdk";
+import CopyFactory, { StopoutListener, TransactionListener, UserLogListener } from "metaapi.cloud-copyfactory-sdk";
 import RiskManagement, {
   TrackerEventListener,
   PeriodStatisticsListener,
@@ -60,6 +60,8 @@ export {
   MetaStats,
   CopyFactory,
   StopoutListener,
+  UserLogListener,
+  TransactionListener,
   RiskManagement,
   TrackerEventListener,
   PeriodStatisticsListener,
@@ -89,4 +91,4 @@ export {
   RpcMetaApiConnectionInstance,
   StreamingMetaApiConnectionInstance,
   TerminalState
-};
+}

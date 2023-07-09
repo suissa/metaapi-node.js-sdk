@@ -1,35 +1,161 @@
+const webpack = require('webpack');
 const path = require('path');
 
-const config = {
-  resolve: {
-    extensions: ['.js', '.es6']
+/* Global */
+const resolve = {
+  extensions: ['.es6', '.js'],
+  alias: {
+    process: 'process/browser',
+    '@HistoryDatabase': './browserHistoryDatabase',
+    '@axios': 'axios',
   },
-  node: {
-    fs: 'empty',
-    tls: 'empty',
-    net: 'empty'
+  fallback: {
+    stream: require.resolve('stream-browserify'),
+    buffer: require.resolve('buffer'),
+    util: require.resolve('util'),
+    fs: false,
+    assert: false,
+    constants: false,
+    crypto: false,
+    http: false,
+    https: false,
+    process: false,
+    url: false,
+    zlib: false,
+    path: false,
+    net: false,
+    os: false,
+    tls: false,
+    tty: false,
+    cluster: false,
+    querystring: false
   },
 };
 
-const defaultConfig = Object.assign({}, config, {
+/* configs */
+const swcESM = require('./swc/swcrc.esm');
+const webESM = {
+  mode: 'production',
   entry: './lib/index.es6',
+  
+  target: 'web',
+
+  module: {
+    rules: [
+      {
+        loader: 'swc-loader',
+        options: swcESM,
+        test: /\.es6$/,
+        exclude: /(node_modules)/
+      }
+    ]
+  },
+
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname),
-    library: 'MetaApi',
-    libraryTarget: 'umd',
-    libraryExport: 'default'
-  }
-});
+    path: path.resolve(__dirname, './dist/esm/'),
+    library: {
+      type: 'module',
+    }
+  },
 
-const exportsConfig = Object.assign({}, config, {
+  experiments: {
+    outputModule: true,
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_DEBUG': false,
+      'process.env.IS_BROWSER': true
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser',
+    }),
+  ],
+
+  resolve
+};
+
+const swcrcUMD = require('./swc/swcrc.umd');
+const webUMD = {
   entry: './lib/index.es6',
-  output: {
-    filename: 'exports.js',
-    path: path.resolve(__dirname),
-    library: 'MetaApiExports',
-    libraryTarget: 'umd',
-  }
-});
+  target: 'web',
+  mode: 'production',
+  
+  module: {
+    rules: [
+      {
+        loader: 'swc-loader',
+        test: /\.es6$/,
+        exclude: /(node_modules)/,
+        options: swcrcUMD
+      }
+    ]
+  },
 
-module.exports = [defaultConfig, exportsConfig];
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, './dist/umd/'),
+    globalObject: 'this',
+    library: {
+      name: 'MetaApi',
+      type: 'umd'
+    }
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_DEBUG': false,
+      'process.env.IS_BROWSER': true
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser'
+    }),
+  ],
+
+  resolve
+};
+
+const swcrcCJS = require('./swc/swcrc.cjs');
+const nodeCJS = {
+  entry: './lib/index.es6',
+  target: 'node',
+  mode: 'production',
+
+  module: {
+    rules: [
+      {
+        loader: 'swc-loader',
+        test: /\.es6$/,
+        exclude: /(node_modules)/,
+        options: swcrcCJS
+      }
+    ]
+  },
+
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, './dist/cjs/'),
+    library: {
+      type: 'commonjs'
+    }
+  },
+  
+  resolve: {
+    extensions: ['.es6', '.js'],
+    alias: {
+      '@HistoryDatabase': './filesystemHistoryDatabase',
+      '@axios': 'axios'
+    }
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.IS_BROWSER': false
+    })
+  ],
+};
+
+module.exports = [ webESM, webUMD, nodeCJS ];

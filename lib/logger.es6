@@ -1,6 +1,6 @@
 'use strict';
 
-const log4js = require('@log4js-node/log4js-api');
+import log4js from '@log4js-node/log4js-api';
 
 let log4jsEnabled = false;
 
@@ -23,10 +23,11 @@ class LoggerManager {
    * @return {Logger} Created logger
    */
   static getLogger(category) {
+    
     if (log4jsEnabled) {
-      let logger = log4js.getLogger(category);
+      const logger = log4js.getLogger(category);
       if (logger._log) {
-        let originalLog = logger._log.bind(logger);
+        const originalLog = logger._log.bind(logger);
         logger._log = function (level, data) {
           if (typeof data[0] === 'function') {
             data[0] = data[0]();
@@ -108,4 +109,4 @@ class NativeLogger {
   }
 }
 
-module.exports = LoggerManager;
+export default LoggerManager;

@@ -19,7 +19,7 @@ export default class ProvisioningProfileApi {
    * @param {string} status optional status filter (allowed values are new and active)
    * @return {Promise<Array<ProvisioningProfile>>} promise resolving with an array of provisioning profile entities
    */
-  getProvisioningProfiles(version: number, status: string): Promise<Array<ProvisioningProfile>>;
+  getProvisioningProfiles(version: number, status?: string): Promise<Array<ProvisioningProfile>>;
 
   /**
    * Retrieves a provisioning profile by id

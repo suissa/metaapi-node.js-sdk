@@ -1,6 +1,9 @@
 /**
  * metaapi.cloud provisioning profile API client (see https://metaapi.cloud/docs/provisioning/)
  */
+ 
+
+import { Buffer } from 'buffer';
 export class ProvisioningProfileClient {
 
   /**
@@ -11,9 +14,9 @@ export class ProvisioningProfileClient {
    * @param {string} status optional status filter (allowed values are new and active)
    * @return {Promise<Array<ProvisioningProfileDto>>} promise resolving with provisioning profiles found
    */
-   getProvisioningProfiles(version: number, status: string): Promise<Array<ProvisioningProfileDto>>;
+  getProvisioningProfiles(version: number, status?: string): Promise<Array<ProvisioningProfileDto>>;
 
-   /**
+  /**
    * Retrieves a provisioning profile by id (see
    * https://metaapi.cloud/docs/provisioning/api/provisioningProfile/readProvisioningProfile/). Throws an error if
    * profile is not found.
@@ -32,8 +35,8 @@ export class ProvisioningProfileClient {
    * @return {Promise<ProvisioningProfileIdDto>} promise resolving with an id of the provisioning profile created
    */
   createProvisioningProfile(provisioningProfile: NewProvisioningProfileDto): Promise<ProvisioningProfileIdDto>;
-   
-   /**
+  
+  /**
    * Uploads a file to a provisioning profile (see
    * https://metaapi.cloud/docs/provisioning/api/provisioningProfile/uploadFilesToProvisioningProfile/). Uploading a
    * file by name is allowed only for Node.js.

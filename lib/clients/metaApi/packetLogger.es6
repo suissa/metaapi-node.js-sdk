@@ -119,6 +119,7 @@ export default class PacketLogger {
   async readLogs(accountId, dateAfter, dateBefore) {
     const folders = await fs.readdir(this._root);
     const packets = [];
+
     for (let folder of folders) {
       const filePath = `${this._root}/${folder}/${accountId}.log`;
       if(await fs.pathExists(filePath)) {

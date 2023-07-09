@@ -47,7 +47,7 @@ describe('EquityTrackingClient', () => {
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/accounts/accountId/trackers',
       method: 'POST',
-      body: tracker
+      data: tracker
     });
   });
 
@@ -105,7 +105,7 @@ describe('EquityTrackingClient', () => {
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/accounts/accountId/trackers/trackerId',
       method: 'PUT',
-      body: update
+      data: update
     });
   });
 
@@ -142,7 +142,7 @@ describe('EquityTrackingClient', () => {
     actual.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/tracker-events/by-broker-time',
-      qs: {
+      params: {
         startBrokerTime: '2022-04-08 09:36:00.000',
         endBrokerTime: '2022-04-08 10:36:00.000',
         accountId: 'accountId',
@@ -174,7 +174,7 @@ describe('EquityTrackingClient', () => {
     actual.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/accounts/accountId/trackers/trackerId/statistics',
-      qs: {startTime: '2022-04-08 09:36:00.000', limit: 100, realTime: false},
+      params: {startTime: '2022-04-08 09:36:00.000', limit: 100, realTime: false},
       method: 'GET'
     });
   });
@@ -204,7 +204,7 @@ describe('EquityTrackingClient', () => {
     actual.should.equal(expected);
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/accounts/accountId/equity-chart',
-      qs: {
+      params: {
         startTime: '2022-04-08 09:36:00.000',
         endTime: '2022-04-08 10:36:00.000',
         realTime: false
@@ -311,7 +311,7 @@ describe('EquityTrackingClient', () => {
     }]);
     sinon.assert.calledOnceWithExactly(domainClient.requestApi, {
       url: '/users/current/accounts/accountId/equity-chart',
-      qs: {
+      params: {
         startTime: '2022-04-08 09:36:00.000',
         endTime: '2022-04-08 10:36:00.000',
         realTime: false

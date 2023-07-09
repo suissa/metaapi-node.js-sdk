@@ -11,6 +11,7 @@ package-lock.json
 test.log
 logs
 dist/
+build/
 es/
 index.js
 exports.js
@@ -18,3 +19,5 @@ test.log
 .metaapi
 streamQuotes2.js
 .temp
+.nvmrc
+.Dockerfile

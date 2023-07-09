@@ -2,7 +2,7 @@
 
 import randomstring from 'randomstring';
 import SynchronizationListener from '../../../clients/metaApi/synchronizationListener';
-import {NotFoundError} from '../../../clients/errorHandler';
+// import {NotFoundError} from '../../../clients/errorHandler';
 import LoggerManager from '../../../logger';
 
 /**

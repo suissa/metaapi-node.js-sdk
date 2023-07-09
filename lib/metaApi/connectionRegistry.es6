@@ -1,6 +1,5 @@
 import StreamingMetaApiConnection from './streamingMetaApiConnection';
 import RpcMetaApiConnection from './rpcMetaApiConnection';
-import randomstring from 'randomstring';
 import StreamingMetaApiConnectionInstance from './streamingMetaApiConnectionInstance';
 import RpcMetaApiConnectionInstance from './rpcMetaApiConnectionInstance';
 

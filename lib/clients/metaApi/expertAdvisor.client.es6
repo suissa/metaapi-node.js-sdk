@@ -93,7 +93,7 @@ export default class ExpertAdvisorClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: expert
+      data: expert
     };
     return this._httpClient.request(opts, 'updateExpertAdvisor');
   }

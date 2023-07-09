@@ -58,7 +58,7 @@ const riskManagement = new RiskManagement(token);
 
 // retrieve MetaApi MetaTrader accounts with riskManagementApiEnabled field set to true
 const account = await api.metatraderAccountApi.getAccount('accountId');
-if(!masterMetaapiAccount.riskManagementApiEnabled) {
+if(!account.riskManagementApiEnabled) {
   throw new Error('Please set riskManagementApiEnabled field to true in your MetaApi account in ' +
     'order to use it in RiskManagement API');
 }

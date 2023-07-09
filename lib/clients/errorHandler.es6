@@ -3,6 +3,10 @@
 /**
  * Base class for API errors. Contains indication of HTTP status.
  */
+
+const isNode = typeof process !== 'undefined' && process.release && process.release.name === 'node';
+
+
 export class ApiError extends Error {
 
   /**
@@ -23,7 +27,7 @@ export class ApiError extends Error {
      * @type {number}
      */
     this.status = status;
-    if (process.title !== 'browser') {
+    if (isNode) {
       Error.captureStackTrace(this, clazz);
     }
   }

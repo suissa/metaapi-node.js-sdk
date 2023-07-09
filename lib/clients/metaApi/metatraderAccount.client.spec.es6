@@ -63,7 +63,7 @@ describe('MetatraderAccountClient', () => {
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${provisioningApiUrl}/users/current/accounts`,
       method: 'GET',
-      qs: {
+      params: {
         provisioningProfileId: 'f9ce1f12-e720-4b9a-9477-c2d4cb25f076'
       },
       headers: {
@@ -264,7 +264,7 @@ describe('MetatraderAccountClient', () => {
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${provisioningApiUrl}/users/current/accounts`,
       method: 'POST',
-      body: account,
+      data: account,
       headers: {
         'auth-token': token,
         'transaction-id': transactionId
@@ -310,7 +310,7 @@ describe('MetatraderAccountClient', () => {
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${provisioningApiUrl}/users/current/accounts/accountId/replicas`,
       method: 'POST',
-      body: replica,
+      data: replica,
       headers: {
         'auth-token': token,
         'transaction-id': transactionId
@@ -610,7 +610,7 @@ describe('MetatraderAccountClient', () => {
         'auth-token': token
       },
       json: true,
-      body: {
+      data: {
         name: 'new account name',
         password: 'new_password007',
         server: 'ICMarketsSC2-Demo',
@@ -651,7 +651,7 @@ describe('MetatraderAccountClient', () => {
         'auth-token': token
       },
       json: true,
-      body: {
+      data: {
         magic: 0,
         tags: ['tag1']
       }
@@ -782,7 +782,7 @@ describe('MetatraderAccountClient', () => {
       headers: {
         'auth-token': token
       },
-      qs: {
+      params: {
         ttlInDays: 14
       },
       json: true,

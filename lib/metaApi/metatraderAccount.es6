@@ -529,6 +529,7 @@ export default class MetatraderAccount {
         `Account ${this.id} is not on specified region ${this._metaApiWebsocketClient.region}`
       );
     }
+
     return this._connectionRegistry.connectStreaming(this, historyStorage, historyStartTime);
   }
 

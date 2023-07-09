@@ -28,7 +28,7 @@ export default class MetatraderAccountApi {
    * @param {AccountsFilter} accountsFilter optional filter
    * @return {Promise<Array<MetatraderAccount>>} promise resolving with an array of MetaTrader account entities
    */
-  getAccounts(accountsFilter: AccountsFilter): Promise<Array<MetatraderAccount>>;
+  getAccounts(accountsFilter?: AccountsFilter): Promise<Array<MetatraderAccount>>;
   
   /**
    * Returns trading account by id
@@ -43,14 +43,14 @@ export default class MetatraderAccountApi {
    * @param {string} replicaId MetaTrader account replica id
    * @return {Promise<MetatraderAccountReplica>} promise resolving with MetaTrader account replica found
    */
-  async getAccountReplica(accountId: string, replicaId: string): Promise<MetatraderAccountReplica>;
+  getAccountReplica(accountId: string, replicaId: string): Promise<MetatraderAccountReplica>;
 
   /**
    * Returns replicas for a trading account
    * @param {string} accountId Primary account id
    * @return {Promise<Array<MetatraderAccountReplica>>} promise resolving with MetaTrader account replicas found
    */
-  async getAccountReplicas(accountId: string): Promise<Array<MetatraderAccountReplica>>;
+  getAccountReplicas(accountId: string): Promise<Array<MetatraderAccountReplica>>;
 
   /**
    * Returns trading account by access token

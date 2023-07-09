@@ -67,7 +67,7 @@ export default class MetatraderAccountGeneratorClient extends MetaApiClient {
         'transaction-id': randomstring.generate(32)
       },
       json: true,
-      body: account
+      data: account
     };
     return this._httpClient.request(opts, 'createMT4DemoAccount');
   }
@@ -92,7 +92,7 @@ export default class MetatraderAccountGeneratorClient extends MetaApiClient {
         'transaction-id': randomstring.generate(32)
       },
       json: true,
-      body: account
+      data: account
     };
     return this._httpClient.request(opts, 'createMT5DemoAccount');
   }

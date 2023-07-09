@@ -1,4 +1,4 @@
-import { MetatraderAccountDto, MetatraderAccountIdDto } from "../clients/metaApi/metatraderAccount.client";
+import { ConfigurationLink, MetatraderAccountDto, MetatraderAccountIdDto, MetatraderAccountUpdateDto, NewMetaTraderAccountReplicaDto } from "../clients/metaApi/metatraderAccount.client";
 import MetaApiWebsocketClient, { MetatraderCandle, MetatraderTick } from "../clients/metaApi/metaApiWebsocket.client";
 import ConnectionRegistry from "./connectionRegistry";
 import ExpertAdvisorClient, { NewExpertAdvisorDto } from "../clients/metaApi/expertAdvisor.client";

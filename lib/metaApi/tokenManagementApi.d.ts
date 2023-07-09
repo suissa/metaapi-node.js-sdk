@@ -53,5 +53,5 @@ export default class TokenManagementApi {
    * @param {String} token token to check
    * @returns {Boolean} is token narrowed down
    */
-  areTokenResourcesNarrowedDown(token: String): Boolean
+  areTokenResourcesNarrowedDown(token: String): boolean
 }

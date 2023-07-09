@@ -1,4 +1,5 @@
 import { ProvisioningProfileClient, ProvisioningProfileDto, ProvisioningProfileUpdateDto } from "../clients/metaApi/provisioningProfile.client";
+import { Buffer } from "buffer";
 
 /**
  * Implements a provisioning profile entity

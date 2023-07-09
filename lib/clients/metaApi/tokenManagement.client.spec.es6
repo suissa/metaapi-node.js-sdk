@@ -105,7 +105,7 @@ describe('TokenManagementClient', () => {
     sandbox.assert.calledOnceWithExactly(httpClient.request, {
       url: `${profileApiUrl}/users/current/narrow-down-auth-token`,
       method: 'POST',
-      body: payload,
+      data: payload,
       headers: {
         'auth-token': token
       },
@@ -137,7 +137,7 @@ describe('TokenManagementClient', () => {
     sandbox.assert.calledOnceWithExactly(httpClient.request, {
       url: `${profileApiUrl}/users/current/narrow-down-auth-token?validity-in-hours=${validityInHours}`,
       method: 'POST',
-      body: payload,
+      data: payload,
       headers: {
         'auth-token': token
       },
