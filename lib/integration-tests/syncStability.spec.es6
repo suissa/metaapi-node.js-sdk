@@ -226,6 +226,10 @@ class FakeServer {
     });
   }
 
+  close() {
+    this.io.close();
+  }
+
 }
 
 const sequentialProcessing = [true];
@@ -475,6 +479,7 @@ sequentialProcessing.forEach(param => {
       await clock.tickAsync(20000);
       await new Promise(res => setTimeout(res, 100));
       await clock.tickAsync(20000);
+      await new Promise(res => setTimeout(res, 100));
       const response = connection.terminalState.accountInformation;
       sinon.assert.match(response, accountInformation);
       connection.synchronized.should.equal(true);
@@ -1783,6 +1788,41 @@ sequentialProcessing.forEach(param => {
       });
 
     });
+
+    it('should connect to a different server if url changed', async () => {
+      api._metaApiWebsocketClient.url = undefined;
+      const getUrlStub = sandbox.stub(api._metaApiWebsocketClient, 'getUrlSettings')
+        .callsFake(async () => {
+          await new Promise(res => setTimeout(res, 10));
+          return {url: 'http://localhost:6785', isSharedClientApi: true};
+        });
+      const account = await api.metatraderAccountApi.getAccount('accountId');
+      connection = account.getStreamingConnection();
+      await connection.connect();
+      clock.tickAsync(5000); 
+      await connection.waitSynchronized({timeoutInSeconds: 10});
+      const response = connection.terminalState.accountInformation;
+      sinon.assert.match(response, accountInformation);
+      (connection.synchronized && connection.terminalState.connected 
+      && connection.terminalState.connectedToBroker).should.equal(true);
+      let fakeServer2 = new FakeServer();
+      await fakeServer2.start(6786);
+      fakeServer.deleteStatusTask('accountId');
+      fakeServer.disableSync();
+      fakeServer.close();
+      server.disconnect();
+      await clock.tickAsync(70000);
+      (connection.synchronized && connection.terminalState.connected 
+        && connection.terminalState.connectedToBroker).should.equal(false);
+      getUrlStub.callsFake(async () => {
+        await new Promise(res => setTimeout(res, 10));
+        return {url: 'http://localhost:6786', isSharedClientApi: true};
+      });
+      await clock.tickAsync(61000);
+      await new Promise(res => setTimeout(res, 50));
+      (connection.synchronized && connection.terminalState.connected 
+        && connection.terminalState.connectedToBroker).should.equal(true);
+    }).timeout(100000);
 
     // eslint-disable-next-line complexity, max-statements
     it('should handle random socket events', async () => {
