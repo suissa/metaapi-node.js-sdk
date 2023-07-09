@@ -74,7 +74,7 @@ describe('HttpClient', () => {
    */
   describe('Retry request', () => {
 
-    const opts = {url: 'http://metaapi.cloud'};
+    const opts = { url: 'http://metaapi.cloud' };
     let sandbox, stub;
 
     before(() => {
@@ -101,7 +101,7 @@ describe('HttpClient', () => {
       it('should retry request on fail with ApiError error', async () => {
         stub.onFirstCall().rejects(new ApiError(ApiError, 'test'))
           .onSecondCall().rejects(new ApiError(ApiError, 'test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         const response = await httpClient.requestWithFailover(opts);
         response.should.match('response');
         sinon.assert.calledThrice(stub);
@@ -113,7 +113,7 @@ describe('HttpClient', () => {
       it('should retry request on fail with InternalError error', async () => {
         stub.onFirstCall().rejects(new InternalError('test'))
           .onSecondCall().rejects(new InternalError('test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         const response = await httpClient.requestWithFailover(opts);
         response.should.match('response');
         sinon.assert.calledThrice(stub);
@@ -141,7 +141,7 @@ describe('HttpClient', () => {
       it('should not retry if error is neither InternalError nor ApiError', async () => {
         stub.onFirstCall().rejects(new ValidationError('test'))
           .onSecondCall().rejects(new ValidationError('test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         try {
           const response = await httpClient.requestWithFailover(opts);
           should.not.exist(response);
@@ -172,7 +172,7 @@ describe('HttpClient', () => {
       it('should retry request after waiting on fail with TooManyRequestsError error', async () => {
         stub.onFirstCall().rejects(getTooManyRequestsError(2))
           .onSecondCall().rejects(getTooManyRequestsError(3))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         const response = await httpClient.requestWithFailover(opts);
         response.should.eql('response');
         sinon.assert.calledThrice(stub);
@@ -184,7 +184,7 @@ describe('HttpClient', () => {
       it('should return error if recommended retry time is too long', async () => {
         stub.onFirstCall().rejects(getTooManyRequestsError(2))
           .onSecondCall().rejects(getTooManyRequestsError(300))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         try {
           const response = await httpClient.requestWithFailover(opts);
           should.not.exist(response);
@@ -201,7 +201,7 @@ describe('HttpClient', () => {
       it('should not count retrying TooManyRequestsError error', async () => {
         stub.onFirstCall().rejects(getTooManyRequestsError(1))
           .onSecondCall().rejects(new ApiError(ApiError, 'test'))
-          .onThirdCall().resolves('response');
+          .onThirdCall().resolves({ data: 'response' });
         httpClient = new HttpClientMock(stub, 10, 60, {retries: 1});
         const response = await httpClient.requestWithFailover(opts);
         response.should.eql('response');
@@ -220,8 +220,8 @@ describe('HttpClient', () => {
        */
       it('should wait for the retry-after header time before retrying', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 3}, statusCode: 202});
-        }).onThirdCall().resolves('response');
+          options.callback(null, {headers: {'retry-after': 3}, status: 202});
+        }).onThirdCall().resolves({ data: 'response' });
         const response = await httpClient.requestWithFailover(opts);
         response.should.eql('response');
         sinon.assert.calledThrice(stub);
@@ -232,7 +232,7 @@ describe('HttpClient', () => {
        */
       it('should return TimeoutError error if retry-after header time is too long', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 30}, statusCode: 202});
+          options.callback(null, {headers: {'retry-after': 30}, status: 202});
         });
         httpClient = new HttpClientMock(stub, 10, 60, {maxDelayInSeconds: 3});
         try {
@@ -250,7 +250,7 @@ describe('HttpClient', () => {
        */
       it('should return TimeoutError error if timed out to retry', async () => {
         stub.callsFake((options)=> {
-          options.callback(null, {headers: {'retry-after': 1}, statusCode: 202});
+          options.callback(null, {headers: {'retry-after': 1}, status: 202});
         });
         httpClient = new HttpClientMock(stub, 10, 60, {maxDelayInSeconds: 2, retries: 3});
         try {

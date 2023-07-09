@@ -1,5 +1,5 @@
 /**
- * HTTP client library based on request-promise
+ * HTTP client library based on axios
  */
 export default class HttpClient {
 

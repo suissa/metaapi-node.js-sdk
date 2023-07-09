@@ -1,6 +1,8 @@
 import MetaAPI from '../index';
 import fs from 'fs-extra';
+
 require('dotenv').config();
+
 const token = process.env.TOKEN;
 let login = process.env.LOGIN;
 let password = process.env.PASSWORD;

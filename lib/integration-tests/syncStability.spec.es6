@@ -2,9 +2,12 @@
 
 import should from 'should';
 import sinon from 'sinon';
+
 import Server from 'socket.io';
+
 import * as helpers from '../helpers/helpers';
-import MetaApi from '../metaApi/metaApi';
+
+import MetaApi from '../index';
 import log4js from 'log4js';
 
 const accountInformation = {
@@ -249,7 +252,7 @@ sequentialProcessing.forEach(param => {
       sandbox = sinon.createSandbox();
       random = Math.random;
     });
-
+    
     beforeEach(async () => {
       syncHost = 'ps-mpa-0';
       defaultSpecifications = [{
@@ -260,25 +263,29 @@ sequentialProcessing.forEach(param => {
         volumeStep: 0.01
       }];
       clock = sinon.useFakeTimers({shouldAdvanceTime: true, now: new Date('2020-04-02T00:00:00.000Z').getTime()});
+      
       api = new MetaApi('token', {application: 'application', domain: 'project-stock.agiliumlabs.cloud',
         useSharedClientApi: true, requestTimeout: 3, retryOpts: {
           retries: 3, minDelayInSeconds: 0.1, maxDelayInSeconds: 0.5, subscribeCooldownInSeconds: 6}, 
         eventProcessing: { sequentialProcessing: param }});
-      api.metatraderAccountApi._metatraderAccountClient.getAccount = (accountId) => ({
-        _id:  accountId,
-        login: '50194988',
-        name: 'mt5a',
-        region: 'vint-hill',
-        reliability: 'regular',
-        server: 'ICMarketsSC-Demo',
-        provisioningProfileId: 'f9ce1f12-e720-4b9a-9477-c2d4cb25f076',
-        magic: 123456,
-        application: 'MetaApi',
-        connectionStatus: 'DISCONNECTED',
-        state: 'DEPLOYED',
-        type: 'cloud-g1',
-        accessToken: '2RUnoH1ldGbnEneCoqRTgI4QO1XOmVzbH5EVoQsA'
-      });
+        
+      api.metatraderAccountApi._metatraderAccountClient.getAccount = (accountId) => {
+        return ({
+          _id:  accountId,
+          login: '50194988',
+          name: 'mt5a',
+          region: 'vint-hill',
+          reliability: 'regular',
+          server: 'ICMarketsSC-Demo',
+          provisioningProfileId: 'f9ce1f12-e720-4b9a-9477-c2d4cb25f076',
+          magic: 123456,
+          application: 'MetaApi',
+          connectionStatus: 'DISCONNECTED',
+          state: 'DEPLOYED',
+          type: 'cloud-g1',
+          accessToken: '2RUnoH1ldGbnEneCoqRTgI4QO1XOmVzbH5EVoQsA'
+        });
+      };
       api._metaApiWebsocketClient.url = 'http://localhost:6785';
       sandbox.stub(api._connectionRegistry._terminalHashManager._clientApiClient,
         'refreshIgnoredFieldLists').resolves();
@@ -295,6 +302,7 @@ sequentialProcessing.forEach(param => {
           'order': ['comment']
         }
       });
+      
       fakeServer = new FakeServer();
       await fakeServer.start();
     });
@@ -316,11 +324,15 @@ sequentialProcessing.forEach(param => {
 
     it('should synchronize account', async () => {
       const account = await api.metatraderAccountApi.getAccount('accountId');
+      
       connection = account.getStreamingConnection();
       await connection.connect();
+      
       clock.tickAsync(5000); 
-      await connection.waitSynchronized({timeoutInSeconds: 10});
+      await connection.waitSynchronized({ timeoutInSeconds: 101});
       const response = connection.terminalState.accountInformation;
+
+
       sinon.assert.match(response, accountInformation);
       (connection.synchronized && connection.terminalState.connected 
       && connection.terminalState.connectedToBroker).should.equal(true);

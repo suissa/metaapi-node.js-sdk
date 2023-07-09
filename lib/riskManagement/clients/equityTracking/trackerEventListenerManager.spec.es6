@@ -80,7 +80,7 @@ describe('TrackerEventListenerManager', () => {
       .withArgs({
         url: '/users/current/tracker-events/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 1,
           accountId: 'accountId',
           trackerId: 'trackerId',
@@ -94,7 +94,7 @@ describe('TrackerEventListenerManager', () => {
       .withArgs({
         url: '/users/current/tracker-events/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 1,
           accountId: 'accountId',
           trackerId: 'trackerId2',
@@ -108,7 +108,7 @@ describe('TrackerEventListenerManager', () => {
       .withArgs({
         url: '/users/current/tracker-events/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 3,
           accountId: 'accountId',
           trackerId: 'trackerId',
@@ -234,7 +234,7 @@ describe('TrackerEventListenerManager', () => {
       .withArgs({
         url: '/users/current/tracker-events/stream',
         method: 'GET',
-        qs: {
+        params: {
           previousSequenceNumber: 1,
           accountId: 'accountId',
           trackerId: 'trackerId',

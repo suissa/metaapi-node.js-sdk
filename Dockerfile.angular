@@ -1,0 +1,35 @@
+# docker build -t metaapi-angular-app -f Dockerfile.angular .
+# docker run -d -p 4200:4200 metaapi-angular-app
+
+FROM node:lts-hydrogen
+
+RUN npm install -g --silent link @angular/cli@latest
+
+COPY ./copyfactory-javascript-sdk /app/copyfactory-javascript-sdk
+
+WORKDIR /app/copyfactory-javascript-sdk
+RUN npm install --silent
+RUN npm run build
+
+COPY ./metastats-javascript-sdk /app/metastats-javascript-sdk
+
+WORKDIR /app/metastats-javascript-sdk
+RUN npm install --silent
+RUN npm run build
+
+COPY ./metaapi-node.js-sdk /app/metaapi-node.js-sdk
+
+WORKDIR /app/metaapi-node.js-sdk
+RUN npm install --silent
+RUN npx link ../copyfactory-javascript-sdk
+RUN npx link ../metastats-javascript-sdk
+
+COPY ./metaapi-node.js-sdk/examples/angular/angular-app /app/angular
+
+WORKDIR /app/angular/
+RUN npm install --silent
+RUN npx link ../metaapi-node.js-sdk
+
+EXPOSE 4200
+
+CMD ["ng", "serve", "--host", "0.0.0.0"]

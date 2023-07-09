@@ -45,10 +45,13 @@ describe('MemoryHistoryStorage', () => {
   it('should load data from the file manager', async () => {
     let testDeal = {id:'37863643', type:'DEAL_TYPE_BALANCE', magic:0, time: new Date(100), commission:0,
       swap:0, profit:10000, platform:'mt5', comment:'Demo deposit 1'};
+
     let testOrder = {id:'61210463', type:'ORDER_TYPE_SELL', state:'ORDER_STATE_FILLED', symbol:'AUDNZD', magic:0,
       time: new Date(50), doneTime: new Date(100), currentPrice:1, volume:0.01,
       currentVolume:0, positionId:'61206630', platform:'mt5', comment:'AS_AUDNZD_5YyM6KS7Fv:'};
+      
     sandbox.stub(db, 'loadHistory').resolves({deals: [testDeal], historyOrders: [testOrder]});
+
     await storage.initialize('accountId', 'MetaApi');
     await new Promise(res => realSetTimeout(res, 50));
     storage.deals.should.match([testDeal]);

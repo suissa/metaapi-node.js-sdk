@@ -32,17 +32,17 @@ export default class ProvisioningProfileClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('getProvisioningProfiles');
     }
-    let qs = {};
+    let params = {};
     if (version) {
-      qs.version = version;
+      params.version = version;
     }
     if (status) {
-      qs.status = status;
+      params.status = status;
     }
     const opts = {
       url: `${this._host}/users/current/provisioning-profiles`,
       method: 'GET',
-      qs,
+      params,
       headers: {
         'auth-token': this._token
       },
@@ -108,7 +108,7 @@ export default class ProvisioningProfileClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: provisioningProfile
+      data: provisioningProfile
     };
     return this._httpClient.request(opts, 'createProvisioningProfile');
   }
@@ -200,7 +200,7 @@ export default class ProvisioningProfileClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: provisioningProfile
+      data: provisioningProfile
     };
     return this._httpClient.request(opts, 'updateProvisioningProfile');
   }

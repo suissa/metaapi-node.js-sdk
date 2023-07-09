@@ -163,7 +163,7 @@ describe('ExpertAdvisorClient', () => {
         'auth-token': token
       },
       json: true,
-      body: {
+      data: {
         preset: 'a2V5MT12YWx1ZTEKa2V5Mj12YWx1ZTIKa2V5Mz12YWx1ZTMKc3VwZXI9dHJ1ZQ==',
         period: '15m',
         symbol: 'EURUSD'

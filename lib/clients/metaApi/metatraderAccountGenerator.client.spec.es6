@@ -61,7 +61,7 @@ describe('MetatraderAccountGeneratorClient', () => {
         'auth-token': token,
         'transaction-id': transactionId
       },
-      body: {
+      data: {
         accountType: 'type',
         balance: 10,
         email: 'test@test.com',
@@ -114,7 +114,7 @@ describe('MetatraderAccountGeneratorClient', () => {
         'auth-token': token,
         'transaction-id': transactionId
       },
-      body: {
+      data: {
         accountType: 'type',
         balance: 10,
         email: 'test@test.com',

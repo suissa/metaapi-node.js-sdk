@@ -1,5 +1,9 @@
 import Fuse from 'fuse.js';
-const isBrowser = process.title === 'browser';
+import { Buffer } from 'buffer';
+
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+const isNodeServer = typeof process !== 'undefined' && process.release && process.release.name === 'node';
+const isSSR = !isBrowser && isNodeServer;
 
 /**
  * Class for managing a data tree with hash references
@@ -311,7 +315,7 @@ export default class ReferenceTree {
     const buf2 = Buffer.from(hex2, 'hex');
     // eslint-disable-next-line no-bitwise
     const bufResult = buf1.map((b, i) => b ^ buf2[i]);
-    return isBrowser
+    return (isBrowser || isSSR)
       // eslint-disable-next-line no-bitwise
       ? Array.prototype.map.call(bufResult, byte => ('0' + (byte & 0xFF).toString(16)).slice(-2)).join('')
       : bufResult.toString('hex');

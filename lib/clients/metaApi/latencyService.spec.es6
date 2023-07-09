@@ -3,7 +3,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import LatencyService from './latencyService';
-import Server from 'socket.io';
+import Server  from 'socket.io';
  
 /**
  * @test {LatencyService}

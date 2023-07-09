@@ -126,6 +126,15 @@ export default class MetaApi {
       this._latencyMonitor = new LatencyMonitor();
       this._metaApiWebsocketClient.addLatencyListener(this._latencyMonitor);
     }
+    
+    this._logger = LoggerManager.getLogger('MetaAPI');
+    if (process.env.IS_BROWSER) {
+      if (!this._tokenManagementApi.areTokenResourcesNarrowedDown(token)) {
+        this._logger.warn('USING THE ADMIN TOKEN');
+        // eslint-disable-next-line max-len
+        this._logger.info('It seems like you are using a admin API token. Since the token can be retrieven from the browser or mobile apps by end user this can lead to your application being compromised, unless you understand what are you doing. Please use Token Management API (https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/tokenManagementApi.md) in your backend application to produce secure tokens which you can then use in web UI or mobile apps.');
+      }
+    }
   }
 
   /**
@@ -177,5 +186,4 @@ export default class MetaApi {
     this._metaApiWebsocketClient.stop();
     this._terminalHashManager._stop();
   }
-
 }

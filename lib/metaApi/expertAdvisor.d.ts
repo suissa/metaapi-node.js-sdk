@@ -1,4 +1,5 @@
 import ExpertAdvisorClient, { ExpertAdvisorDto, NewExpertAdvisorDto } from "../clients/metaApi/expertAdvisor.client";
+import { Buffer } from "buffer";
 
 /**
  * Implements an expert advisor entity

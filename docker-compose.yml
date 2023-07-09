@@ -1,0 +1,25 @@
+version: '3'
+services:
+  metaapi-angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.angular
+    ports:
+      - 4200:4200
+    command: ng serve --host 0.0.0.0
+
+  metaapi-react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+    ports:
+      - 5173:5173
+    command: npm run dev
+
+  metaapi-vue-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.vue
+    ports:
+      - 5174:5173
+    command: npm run dev

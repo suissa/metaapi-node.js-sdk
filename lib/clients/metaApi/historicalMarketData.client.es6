@@ -39,7 +39,7 @@ export default class HistoricalMarketDataClient extends MetaApiClient {
       url: `${host}/users/current/accounts/${accountId}/historical-market-data/symbols/${symbol}/` +
         `timeframes/${timeframe}/candles`,
       method: 'GET',
-      qs: {
+      params: {
         startTime,
         limit
       },
@@ -74,7 +74,7 @@ export default class HistoricalMarketDataClient extends MetaApiClient {
     const opts = {
       url: `${host}/users/current/accounts/${accountId}/historical-market-data/symbols/${symbol}/ticks`,
       method: 'GET',
-      qs: {
+      params: {
         startTime,
         offset,
         limit

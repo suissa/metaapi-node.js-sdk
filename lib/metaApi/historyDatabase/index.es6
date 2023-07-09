@@ -1,12 +1,5 @@
 'use strict';
 
-const isBrowser = process.title === 'browser';
-
-let HistoryDatabase;
-if(isBrowser) {
-  HistoryDatabase = require('./browserHistoryDatabase').default;
-} else {
-  HistoryDatabase = require('./filesystemHistoryDatabase').default;
-}
+import HistoryDatabase from '@HistoryDatabase';
 
 export default HistoryDatabase;

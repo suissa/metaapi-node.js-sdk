@@ -52,7 +52,7 @@ describe('ProvisioningProfileClient', () => {
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${provisioningApiUrl}/users/current/provisioning-profiles`,
       method: 'GET',
-      qs: {
+      params: {
         version: 5,
         status: 'active'
       },
@@ -137,7 +137,7 @@ describe('ProvisioningProfileClient', () => {
     sinon.assert.calledOnceWithExactly(httpClient.request, {
       url: `${provisioningApiUrl}/users/current/provisioning-profiles`,
       method: 'POST',
-      body: profile,
+      data: profile,
       headers: {
         'auth-token': token
       },
@@ -247,7 +247,7 @@ describe('ProvisioningProfileClient', () => {
         'auth-token': token
       },
       json: true,
-      body: {
+      data: {
         name: 'new name'
       }
     }, 'updateProvisioningProfile');

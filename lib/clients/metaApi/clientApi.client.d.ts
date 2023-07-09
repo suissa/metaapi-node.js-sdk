@@ -19,7 +19,7 @@ export default class ClientApiClient extends MetaApiClient {
    * @param {String} region account region
    * @returns {Promise} promise resolving when the hashing field lists are updated.
    */
-  refreshIgnoredFieldLists(region: string): Promise;
+  refreshIgnoredFieldLists(region: string): Promise<any>;
 
   /**
    * Retrieves hashing ignored field lists

@@ -161,7 +161,7 @@ export default class TokenManagementClient extends MetaApiClient {
         'auth-token': this._token
       },
       json: true,
-      body: accessRules
+      data: accessRules
     };
     return this._httpClient.request(opts, 'narrowDownToken');
   }

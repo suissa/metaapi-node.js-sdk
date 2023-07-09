@@ -56,7 +56,7 @@ export default class TrackerEventListenerManager {
         const packets = await this._domainClient.requestApi({
           url: '/users/current/tracker-events/stream',
           method: 'GET',
-          qs: {
+          params: {
             previousSequenceNumber: sequenceNumber,
             accountId, trackerId,
             limit: 1000

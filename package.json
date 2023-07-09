@@ -45,57 +45,79 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/metaapi-node.js-sdk.git"
   },
-  "version": "23.2.2",
+  "version": "23.3.0",
   "dependencies": {
     "@log4js-node/log4js-api": "~1.0.2",
-    "babel-runtime": "~6.26.0",
+    "axios": "~1.4.0",
     "binary-search-tree": "~0.2.6",
+    "buffer": "~6.0.3",
+    "bufferutil": "~4.0.7",
+    "crypto-browserify": "~3.12.0",
     "crypto-js": "~4.1.1",
-    "dotenv": "~8.2.0",
     "fs-extra": "~9.0.1",
     "fuse.js": "~6.6.2",
     "idb": "~5.0.4",
+    "log4js": "~6.9.1",
     "metaapi.cloud-copyfactory-sdk": "^7.0.0",
-    "metaapi.cloud-metastats-sdk": "^3.1.0",
-    "moment": "~2.29.1",
-    "promise.any": "~2.0.3",
-    "randomstring": "~1.1.5",
-    "request": "~2.88.2",
-    "request-promise-any": "~1.0.8",
-    "socket.io-client": "~2.4.0"
+    "metaapi.cloud-metastats-sdk": "^3.4.1",
+    "moment": "~2.29.4",
+    "promise.any": "~2.0.5",
+    "randomstring": "~1.2.3",
+    "socket.io-client": "~2.4.0",
+    "stream-browserify": "~3.0.0",
+    "utf-8-validate": "~5.0.10",
+    "util": "~0.10.4"
   },
   "devDependencies": {
-    "babel-cli": "~6.26.0",
-    "babel-plugin-transform-runtime": "~6.23.0",
-    "babel-preset-env": "~1.7.0",
-    "babel-preset-es2015": "~6.24.1",
-    "babel-register": "~6.26.0",
+    "@swc-node/register": "~1.4.2",
+    "@swc/cli": "~0.1.62",
+    "@swc/core": "~1.3.56",
+    "@types/node": "~20.1.1",
+    "assert": "~2.0.0",
     "copyfiles": "~2.4.1",
+    "dotenv": "~16.0.3",
     "eslint": "~7.1.0",
     "eslint-plugin-mocha": "~7.0.0",
     "fake-indexeddb": "~3.1.2",
-    "gulp": "~4.0.2",
-    "gulp-rename": "~2.0.0",
-    "log4js": "~6.7.1",
     "mocha": "~7.2.0",
+    "module-alias": "~2.2.2",
     "should": "~13.2.3",
     "sinon": "~9.0.2",
     "socket.io": "~2.4.0",
-    "webpack": "~4.46",
-    "webpack-cli": "~4.10.0"
+    "swc-loader": "~0.2.3",
+    "webpack": "~5.82",
+    "webpack-cli": "~5.0.2"
   },
   "browser": {
-    "fs": false,
     "path": false,
-    "os": false
+    "fs": false,
+    "os": false,
+    "tls": false
   },
   "scripts": {
-    "test": "mocha --exit --require babel-register lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
-    "lint": "eslint --ext es6 ./lib",
+    "test": "SWC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
     "lint:fix": "eslint --ext es6 ./lib --fix",
-    "build": "rm -rf dist; rm -rf es; npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp && copyfiles -u 1 \"lib/**/*.d.ts\" dist && copyfiles -u 1 \"lib/**/*.d.ts\" es",
-    "build-win": "rmdir /Q /S dist | rmdir /Q /S es | npx babel lib --out-dir dist --source-maps inline --ignore lib/templates && npx webpack --config webpack.config.js && gulp && copyfiles -u 1 \"lib/**/*.d.ts\" dist && copyfiles -u 1 \"lib/**/*.d.ts\" es"
+    "lint": "eslint --ext es6 ./lib",
+    "build-win": "npm run clean-win | npm run build:optimized && npm run build:transpile && npm run build:types",
+    "build": "npm run clean; npm run build:optimized && npm run build:transpile && npm run build:types",
+    "build:optimized": "npx webpack --config webpack.config.js",
+    "build:transpile": "node ./swc/swc.transform.cjs.js && node ./swc/swc.transform.esm.js ",
+    "build:types": "copyfiles -u 1 \"lib/**/*.d.ts\" build/esm && copyfiles -u 1 \"lib/**/*.d.ts\" build/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dist/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dist/esm && copyfiles -u 1 \"lib/**/*.d.ts\" dist/umd",
+    "clean-win": "rmdir /Q /S dist | rmdir /Q /S build",
+    "clean": "rm -rf build; rm -rf dist;"
   },
-  "main": "dist/index.js",
-  "module": "es/index.js"
+  "module": "./dist/esm/index.js",
+  "unpkg": "./dist/umd/index.js",
+  "main": "./dist/cjs/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./cjs": "./build/cjs/index.js",
+    "./esm": "./build/esm/index.js",
+    "./browser": "./dist/umd/index.js",
+    "./node": "./dist/cjs/index.js",
+    "./web": "./dist/esm/index.js"
+  }
 }

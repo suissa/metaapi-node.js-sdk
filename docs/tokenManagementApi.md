@@ -43,7 +43,7 @@ In order to narrow down token permissions to access specific resources please us
 
 ```javascript
 try {
-  // restriсе web app token to access specific trading account only
+  // restrice web app token to access specific trading account only
   const narrowedDownToken = await api.tokenManagementApi.narrowDownTokenResources(
     [{entity: 'account', id: '3860c395-6842-43d9-9b6a-9f9841bb2c8a'}],
     validityInHours
@@ -77,25 +77,26 @@ Using the narrowDownToken method you can specify detailed access rules you need 
 
 ```javascript
 // generate a token with access rules specified in detailed format
-const narrowedDownToken = await api.tokenManagementApi.narrowDownToken({
-  accessRules: [
-    {
-      id: 'trading-account-management-api',
-      application: 'trading-account-management-api',
-      service: 'rest',
-      resources: [{entity: 'account', id: '3860c395-6842-43d9-9b6a-9f9841bb2c8a'}],
-      methodGroups: [{group: 'account-management', methods: [{method: 'getAccount'}]}],
-      roles: ['reader']
-    },
-    {
-      id: 'mt-manager-api',
-      application: 'mt-manager-api',
-      service: 'rest',
-      resources: [{entity: 'mt-manager', id: 'c55da8ff-c177-4236-bf4c-a832a67c6ab3'}],
-      methodGroups: [{group: '*', methods: [{method: '*', scopes: ['dealing', 'public']}]}],
-      roles: ['reader']
-    }],
-    validityInHours
+const narrowedDownToken = await api.tokenManagementApi.narrowDownToken(
+  {
+    accessRules: [
+      {
+        id: 'trading-account-management-api',
+        application: 'trading-account-management-api',
+        service: 'rest',
+        resources: [{entity: 'account', id: '3860c395-6842-43d9-9b6a-9f9841bb2c8a'}],
+        methodGroups: [{group: 'account-management', methods: [{method: 'getAccount'}]}],
+        roles: ['reader']
+      },
+      {
+        id: 'mt-manager-api',
+        application: 'mt-manager-api',
+        service: 'rest',
+        resources: [{entity: 'mt-manager', id: 'c55da8ff-c177-4236-bf4c-a832a67c6ab3'}],
+        methodGroups: [{group: '*', methods: [{method: '*', scopes: ['dealing', 'public']}]}],
+        roles: ['reader']
+      }]
+  }, validityInHours
 });
 ```
 
