@@ -1,3 +1,8 @@
+23.3.1
+ - refactored file structure for backward compatibility
+ - fixed support for Node.js v13.x.x
+ - fixed build for Node.js v11.x.x.
+
 23.3.0
  - refactored build to support ESM, UMD, CJS
  - added examples of usage with Angular, React, and Vue applications

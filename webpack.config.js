@@ -53,7 +53,7 @@ const webESM = {
 
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, './dist/esm/'),
+    path: path.resolve(__dirname, './dists/esm/'),
     library: {
       type: 'module',
     }
@@ -96,7 +96,7 @@ const webUMD = {
 
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, './dist/umd/'),
+    path: path.resolve(__dirname, './dists/umd/'),
     globalObject: 'this',
     library: {
       name: 'MetaApi',
@@ -137,7 +137,7 @@ const nodeCJS = {
 
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, './dist/cjs/'),
+    path: path.resolve(__dirname, './dists/cjs/'),
     library: {
       type: 'commonjs'
     }
