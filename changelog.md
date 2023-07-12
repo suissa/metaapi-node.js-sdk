@@ -1,3 +1,7 @@
+23.3.2
+ - fixed dockerfiles
+ - fixed UMD-build
+ 
 23.3.1
  - refactored file structure for backward compatibility
  - fixed support for Node.js v13.x.x

@@ -7,7 +7,7 @@
 
 Integration MetaApi SDK with React.
 
-You can look at a demo of these examples [here](https://drive.google.com/file/d/1GMCr4DC1gWEf40SjVw8psm0t9te07xQ7/view?usp=sharing).
+You can look at a demo of these examples [here](https://youtu.be/7Ka-XGuIInA).
 
 ## Prerequisites
 
@@ -26,51 +26,6 @@ npm install --save metaapi.cloud-sdk
 
 ## Using
 
-Import library in your component file:
-
-``` javascript
-import MetaApi from 'metaapi.cloud-sdk';
-```
-
-Create instance of MetaApi with your MetaApi token:
-
-``` javascript
-// Get instance of MetaApi with your MetaApi token
-const metaApi = new MetaApi(token);
-```
-
-Establish connection with MetaTrader account.
-
-``` javascript
-const account = await metaApi.metatraderAccountApi.getAccount(accountId);
-
-// Get connection instance
-await account.waitConnected();
-const connection = account.getRPCConnection();
-
-/* For WS connection use:
-const connection = account.getStreamingConnection();
-*/ 
-
-// Wait until connection is established
-await connection.connect();
-await connection.waitSynchronized();
-```
-
-Use _connection_ to work with API:
-
-``` javascript
-// Get account information
-const accountInformation = await connection.getAccountInformation();
-```
-
-## Using
-
-You can apply MetaApi to your React application in two ways:
-
-* Functional component;
-* Class component.
-
 You can apply MetaApi to your React application in two ways:
 
 * Functional component;
@@ -80,6 +35,7 @@ You can apply MetaApi to your React application in two ways:
 
 ``` javascript
 import React, { useState, useEffect } from 'react';
+// import library in your component file
 import MetaApi, { RpcMetaApiConnectionInstance } from 'metaapi.cloud-sdk1';
 
 const accountId = 'your-metatrader-account-id';
@@ -133,6 +89,7 @@ export default MyComponent;
 
 ``` javascript
 import React, { Component } from 'react';
+// import library in your component file
 import MetaApi from 'metaapi.cloud-sdk';
 
 interface IMyComponentProps {}
@@ -189,13 +146,53 @@ export default MyComponent;
 
 ## Examples
 
-- [Historical Market Data](./react-app/src/components/historical)
-- [Risk Management](./react-app/src/components/risk-management)
-- [Stream Quotes](./react-app/src/components/stream-quotes)
-- [CopyFactory](./react-app/src/components/copy-factory)
-- [MetaStats](./react-app/src/components/meta-stats)
-- [MetaApi](./react-app/src/components/meta-api)
+Integration examples are located in the [`./react-app/`](./react-app/) directory.
 
+- Historical Market Data: [src/components/historical/](./react-app/src/components/historical)
+- RiskManagement: [src/components/risk-management/](./react-app/src/components/risk-management)
+- Stream Quotes: [src/components/stream-quotes](./react-app/src/components/stream-quotes)
+- CopyFactory: [src/components/copy-factory/](./react-app/src/components/copy-factory)
+- MetaStats: [src/components/meta-stats/](./react-app/src/components/meta-stats)
+- MetaApi: [src/components/meta-api/](./react-app/src/components/meta-api)
+
+### Prerequisites of examples
+
+- Node.js `14.18+, 16+` or later installed _(for Vite)_
+- NPM `6.14+` or later installed
+
+### Installation and Running
+
+Download the MetaApi SDK from GitHub using the following command:
+
+```bash
+git clone git@github.com:agiliumtrade-ai/metaapi-node.js-sdk.git
+cd metaapi-node.js-sdk/examples/react/react-app/
+```
+
+#### Runnig manually
+
+```bash
+npm install
+npm start
+# runned at localhost:5173
+```
+
+#### Start via docker
+
+Use `docker`:
+
+```bash
+docker build -t metaapi-react-app-example -f Dockerfile .
+docker run -d -p 5173:5173 metaapi-react-app-example
+# runned at localhost:5173
+```
+
+Or use `docker-compose`:
+
+```bash
+docker-compose up
+# runned at localhost:5173
+```
 
 ## More integration 
 

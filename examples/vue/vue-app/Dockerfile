@@ -1,12 +1,12 @@
+# docker build -t metaapi-vue-app-example -f Dockerfile .
+# docker run -d -p 5173:5173 metaapi-vue-app-example
+
 FROM node:lts-hydrogen
 
-WORKDIR /app
+COPY . /app/vue
 
-COPY package*.json ./
-
+WORKDIR /app/vue/
 RUN npm install --silent
-
-COPY . .
 
 EXPOSE 5173
 

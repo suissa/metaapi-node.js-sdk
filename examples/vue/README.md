@@ -7,7 +7,7 @@
 
 Example of integration of MetaApi with Vue 3 application.
 
-You can look at a demo of these examples [here](https://drive.google.com/file/d/1WSI3TRBM_kbMSj1youSw0Ufi1YGk8A6E/view?usp=sharing).
+You can look at a demo of these examples [here](https://youtu.be/MQSOU7DK1J4).
 
 ## Prerequisites
 
@@ -26,46 +26,6 @@ npm install --save metaapi.cloud-sdk
 
 ## Using
 
-Import library in your component file:
-
-``` javascript
-import MetaApi from 'metaapi.cloud-sdk';
-```
-
-Create instance of MetaApi with your MetaApi token:
-
-``` javascript
-// Get instance of MetaApi with your MetaApi token
-const metaApi = new MetaApi(token);
-```
-
-Establish connection with MetaTrader account.
-
-``` javascript
-const account = await metaApi.metatraderAccountApi.getAccount(accountId);
-
-// Get connection instance
-await account.waitConnected();
-const connection = account.getRPCConnection();
-
-/* For WS connection use:
-const connection = account.getStreamingConnection();
-*/ 
-
-// Wait until connection is established
-await connection.connect();
-await connection.waitSynchronized();
-```
-
-Use _connection_ to work with API:
-
-``` javascript
-// Get account information
-const accountInformation = await connection.getAccountInformation();
-```
-
-## Examples
-
 You can apply MetaApi to your Vue 3 application in two ways:
 
 * Composition API (recommended);
@@ -77,7 +37,11 @@ You can apply MetaApi to your Vue 3 application in two ways:
 <script setup lang="ts">
   
 import { toRefs, ref } from 'vue'
-import MetaApi, { RpcMetaApiConnectionInstance, StreamingMetaApiConnectionInstance } from 'metaapi.cloud-sdk'
+// import library in your component file
+import MetaApi, { 
+  RpcMetaApiConnectionInstance,
+  StreamingMetaApiConnectionInstance
+} from 'metaapi.cloud-sdk'
 
 const accountId = 'your-metaapi-account-id'
 const token = 'your-metaapi-token'
@@ -136,14 +100,55 @@ async function fetchData() {
 </template>
 ```
 
-### Examples
+## Examples
 
-- [Historical Market Data](./vue-app/src/components/historical)
-- [Risk Management](./vue-app/src/components/risk-management)
-- [Stream Quotes](./vue-app/src/components/stream-quotes)
-- [CopyFactory](./vue-app/src/components/copy-factory)
-- [MetaStats](./vue-app/src/components/meta-stats)
-- [MetaApi](./vue-app/src/components/meta-api)
+Integration examples are located in the [`./vue-app/`](./vue-app/) directory.
+
+- Historical Market Data: [src/components/historical/](./vue-app/src/components/historical)
+- RiskManagement: [src/components/risk-management/](./vue-app/src/components/risk-management)
+- Stream Quotes: [src/components/stream-quotes](./vue-app/src/components/stream-quotes)
+- CopyFactory: [src/components/copy-factory/](./vue-app/src/components/copy-factory)
+- MetaStats: [src/components/meta-stats/](./vue-app/src/components/meta-stats)
+- MetaApi: [src/components/meta-api/](./vue-app/src/components/meta-api)
+
+### Prerequisites of examples
+
+- Node.js `14.18+, 16+` or later installed _(for Vite)_
+- NPM `6.14+` or later installed
+
+### Installation and Running
+
+Download the MetaApi SDK from GitHub using the following command:
+
+```bash
+git clone git@github.com:agiliumtrade-ai/metaapi-node.js-sdk.git
+cd metaapi-node.js-sdk/examples/vue/vue-app/
+```
+
+#### Runnig manually
+
+```bash
+npm install
+npm start 
+# runned at localhost:5173
+```
+
+#### Start via docker
+
+Use `docker`:
+
+```bash
+docker build -t metaapi-vue-app-example -f Dockerfile .
+docker run -d -p 5173:5173 metaapi-vue-app-example
+#  runned at localhost:5173
+```
+
+Or use `docker-compose`:
+
+```bash
+docker-compose up 
+# runned at localhost:5173 
+```
 
 ## More integration 
 

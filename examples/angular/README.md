@@ -3,18 +3,18 @@
   <img src="https://angular.io/assets/images/favicons/favicon.ico" alt="Logo-Angular" width="50" height="50"/>
 </div>
 
-# MetaApi Integration Example with Angular
+# MetaApi Integration with Angular
 
 Example of integration of MetaApi with Angular application.
 
-You can look at a demo of these examples [here](https://drive.google.com/file/d/1u0BVfIEKXkyerw4V074xYcxKY_nrBwg_/view?usp=sharing).
+You can look at a demo of these examples [here](https://youtu.be/O4XmyMh1ozg).
 
 ## Prerequisites
 
-- Node.js `14.10+, 16.10+` or later installed
-- NPM `6.14+` or later installed
+- Node.js `16.14+, 18.10+` or later installed
+- NPM `8+` or later installed
 - A valid MetaApi API token (you can get one by [signing up for a MetaApi account](https://app.metaapi.cloud/token))
-- A MetaTrader account connected to MetaApi.
+- A MetaTrader account connected to MetaApi
 
 ## Installation
 
@@ -26,74 +26,43 @@ npm install --save metaapi.cloud-sdk
 
 ## Using
 
-Import library in your component file:
-
-``` javascript
-import MetaApi from 'metaapi.cloud-sdk';
-```
-
-Create instance of MetaApi with your MetaApi token:
-
-``` javascript
-// Get instance of MetaApi with your MetaApi token
-const metaApi = new MetaApi(token);
-```
-
-Establish connection with MetaTrader account.
-
-``` javascript
-const account = await metaApi.metatraderAccountApi.getAccount(accountId);
-
-// Get connection instance
-await account.waitConnected();
-const connection = account.getRPCConnection();
-
-/* For WS connection use:
-const connection = account.getStreamingConnection();
-*/ 
-
-// Wait until connection is established
-await connection.connect();
-await connection.waitSynchronized();
-```
-
-Use _connection_ to work with API:
-
-``` javascript
-// Get account information
-const accountInformation = await connection.getAccountInformation();
-```
-
-## Examples
-
-### Service
-
-Create _service_ for MetaApi and add methods for working with MetaApi:
+To work with `MetaApi` in `Angular`, create a service called `MetaapiService` that will be responsible for connecting to and interacting with the API.
 
 ``` javascript
 // metaapi.service.ts
 import { Injectable } from '@angular/core';
-import MetaApi, { MetatraderAccountInformation, RpcMetaApiConnectionInstance } from 'metaapi.cloud-sdk';
+
+//  import library in your component file
+import MetaApi, { 
+  MetatraderAccountInformation, 
+  RpcMetaApiConnectionInstance
+} from 'metaapi.cloud-sdk';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MetaapiRpcService {
+export class MetaapiService {
   public metaApi: MetaApi;
 
   private _accountId = 'your-metaapi-account-id';
   private _token = 'your-metaapi-token';
 
   constructor() {
+    // Get instance of MetaApi with your MetaApi token
     this.metaApi = new MetaApi(this._token);
   }
 
-  async connectToMetaTraderApiRPC(): Promise<RpcMetaApiConnectionInstance> {
-    const account = await this.metaApi.metatraderAccountApi.getAccount(this._accountId);
+  async connectToMetaTraderApi(): Promise<RpcMetaApiConnectionInstance> {
+    const account = await this.metaApi
+      .metatraderAccountApi.getAccount(this._accountId);
 
     // Get connection instance
     await account.waitConnected();
     const connection = account.getRPCConnection();
+
+    /* For WS connection use:
+    const connection = account.getStreamingConnection();
+    */ 
 
     // Wait until connection is established
     await connection.connect();
@@ -102,9 +71,10 @@ export class MetaapiRpcService {
     return connection;
   }
 
-  // Do something with MetaApi!
+  // Use connectToMetaTraderApiRPC to work with API
   async getAccountInformation(): Promise<MetatraderAccountInformation> {
-    const connection = await this.connectToMetaTraderApiRPC();
+    const connection = await this.connectToMetaTraderApi();
+    // Get account information
     return await connection.getAccountInformation();
   }
 }
@@ -127,7 +97,7 @@ import { MetatraderAccountInformation } from 'metaapi.cloud-sdk';
   `,
 })
 export class AppComponent {
-  accountInfo?: MetatraderAccountInformation;
+  accountInfo?: MetatraderAccountInformatipon;
 
   constructor(private metaApiService: MetaApiService) {
     this.fetchData();
@@ -146,14 +116,50 @@ export class AppComponent {
 }
 ```
 
-## Examples of using
+## Examples
 
-- [Historical Market Data](./angular-app/src/app/historical)
-- [Risk Management](./angular-app/src/app/risk-management)
-- [Stream Quotes](./angular-app/src/app/stream-quotes)
-- [CopyFactory](./angular-app/src/app/copy-factory)
-- [MetaStats](./angular-app/src/app/meta-stats)
-- [MetaApi](./angular-app/src/app/meta-api)
+Integration examples are located in the [`./angular-app/`](./angular-app/) directory.
+
+- Historical Market Data: [src/app/historical/](./angular-app/src/app/historical)
+- RiskManagement: [src/app/risk-management/](./angular-app/src/app/risk-management)
+- Stream Quotes: [src/app/stream-quotes](./angular-app/src/app/stream-quotes)
+- CopyFactory: [src/app/copy-factory/](./angular-app/src/app/copy-factory)
+- MetaStats: [src/app/meta-stats/](./angular-app/src/app/meta-stats)
+- MetaApi: [src/app/meta-api/](./angular-app/src/app/meta-api)
+
+### Installation and Running
+
+Download the MetaApi SDK from GitHub using the following command:
+
+```bash
+git clone git@github.com:agiliumtrade-ai/metaapi-node.js-sdk.git
+cd metaapi-node.js-sdk/examples/angular/angular-app/
+```
+
+#### Runnig manually
+
+```bash
+npm install
+npm start
+# runned at localhost:4200
+```
+
+#### Start via docker
+
+Use `docker`:
+
+```bash
+docker build -t metaapi-angular-app-example -f Dockerfile .
+docker run -d -p 4200:4200 metaapi-angular-app-example
+# runned at localhost:4200
+```
+
+Or use `docker-compose`:
+
+```bash
+docker-compose up
+# runned at localhost:4200
+```
 
 ## More integration
 
