@@ -39,28 +39,28 @@ const log = (...args: unknown[]) => {
 
 class QuoteListener extends SynchronizationListener {
   async onSymbolPriceUpdated(instanceIndex: any, price: any) {
-    if(price.symbol === symbol) {
-      log(symbol + ' price updated', price);
+    if(price.symbol === symbol.value) {
+      log(symbol.value + ' price updated', price);
     }
   }
   async onCandlesUpdated(instanceIndex: any, candles: any) {
     for (const candle of candles) {
-      if (candle.symbol === symbol) {
-        log(symbol + ' candle updated', candle);
+      if (candle.symbol === symbol.value) {
+        log(symbol.value + ' candle updated', candle);
       }
     }
   }
   async onTicksUpdated(instanceIndex: any, ticks: any) {
     for (const tick of ticks) {
-      if (tick.symbol === symbol) {
-        log(symbol + ' tick updated', tick);
+      if (tick.symbol === symbol.value) {
+        log(symbol.value + ' tick updated', tick);
       }
     }
   }
   async onBooksUpdated(instanceIndex: any, books: any) {
     for (const book of books) {
-      if (book.symbol === symbol) {
-        log(symbol + ' order book updated', book);
+      if (book.symbol === symbol.value) {
+        log(symbol.value + ' order book updated', book);
       }
     }
   }
@@ -125,7 +125,7 @@ const makeRequest = async () => {
     ]);
     log('Price after subscribe:', connection.terminalState.price(symbol.value));
 
-    log('[' + (new Date().toISOString()) + '] Synchronized successfully, streaming ' + symbol + ' market data now...');
+    log('[' + (new Date().toISOString()) + '] Synchronized successfully, streaming ' + symbol.value + ' market data now...');
 
   } catch (err) {
     logErr(err);
@@ -163,8 +163,8 @@ watch(isConnecting, () => {
     .then(() => new Promise(resolve => setTimeout(resolve, 60000)))
     .then(() => log('60s passed'))
     .then(() => disconnect())
-    .catch(err => console.log('failed', err))
-    .finally(() => isConnecting.value = false);
+    .then(() => isConnecting.value = false)
+    .catch(err => console.log('failed', err));
 });
 
 onUnmounted(() => {

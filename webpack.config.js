@@ -1,37 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 
-/* Global */
-const resolve = {
-  extensions: ['.es6', '.js'],
-  alias: {
-    process: 'process/browser',
-    '@HistoryDatabase': './browserHistoryDatabase',
-    '@axios': 'axios',
-  },
-  fallback: {
-    stream: require.resolve('stream-browserify'),
-    buffer: require.resolve('buffer'),
-    util: require.resolve('util'),
-    fs: false,
-    assert: false,
-    constants: false,
-    crypto: false,
-    http: false,
-    https: false,
-    process: false,
-    url: false,
-    zlib: false,
-    path: false,
-    net: false,
-    os: false,
-    tls: false,
-    tty: false,
-    cluster: false,
-    querystring: false
-  },
-};
-
 /* configs */
 const swcESM = require('./swc/swcrc.esm');
 const webESM = {
@@ -74,7 +43,35 @@ const webESM = {
     }),
   ],
 
-  resolve
+  resolve: {
+    extensions: ['.es6', '.js'],
+    alias: {
+      process: 'process/browser',
+      '@HistoryDatabase': './browserHistoryDatabase',
+      '@axios': 'axios',
+    },
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer'),
+      util: require.resolve('util'),
+      fs: false,
+      assert: false,
+      constants: false,
+      crypto: false,
+      http: false,
+      https: false,
+      process: false,
+      url: false,
+      zlib: false,
+      path: false,
+      net: false,
+      os: false,
+      tls: false,
+      tty: false,
+      cluster: false,
+      querystring: false
+    },
+  }
 };
 
 const swcrcUMD = require('./swc/swcrc.umd');
@@ -115,7 +112,38 @@ const webUMD = {
     }),
   ],
 
-  resolve
+  resolve: {
+    extensions: ['.es6', '.js'],
+    alias: {
+      process: 'process/browser',
+      '@HistoryDatabase': './browserHistoryDatabase',
+      '@axios': 'axios',
+      'metaapi.cloud-metastats-sdk': 'metaapi.cloud-metastats-sdk/web',
+      'metaapi.cloud-copyfactory-sdk': 'metaapi.cloud-copyfactory-sdk/web'
+  
+    },
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer'),
+      util: require.resolve('util'),
+      fs: false,
+      assert: false,
+      constants: false,
+      crypto: false,
+      http: false,
+      https: false,
+      process: false,
+      url: false,
+      zlib: false,
+      path: false,
+      net: false,
+      os: false,
+      tls: false,
+      tty: false,
+      cluster: false,
+      querystring: false
+    },
+  }
 };
 
 const swcrcCJS = require('./swc/swcrc.cjs');

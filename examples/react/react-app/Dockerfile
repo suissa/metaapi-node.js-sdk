@@ -1,12 +1,12 @@
+# docker build -t metaapi-react-app-example -f Dockerfile .
+# docker run -d -p 5173:5173 metaapi-react-app-example
+
 FROM node:lts-hydrogen
 
-WORKDIR /app
+COPY . /app/react
 
-COPY package*.json ./
-
+WORKDIR /app/react/
 RUN npm install --silent
-
-COPY . .
 
 EXPOSE 5173
 
