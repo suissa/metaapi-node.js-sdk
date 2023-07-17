@@ -13,6 +13,7 @@ module.exports = {
   'module': {
     'type': 'commonjs'
   },
+  'inlineSourcesContent': true,
   'sourceMaps': true,
   'isModule': true
 };

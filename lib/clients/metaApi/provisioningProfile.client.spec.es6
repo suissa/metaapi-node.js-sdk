@@ -1,8 +1,10 @@
 'use strict';
 
 import HttpClient from '../httpClient';
+import should from 'should';
 import sinon from 'sinon';
 import ProvisioningProfileClient from './provisioningProfile.client';
+import FormData from 'form-data';
 
 const provisioningApiUrl = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 
@@ -166,24 +168,37 @@ describe('ProvisioningProfileClient', () => {
    * @test {ProvisioningProfileClient#uploadProvisioningProfileFile}
    */
   it('should upload file to a provisioning profile via API', async () => {
+    function isObjectsEqualIgnoringBoundary(obj1, obj2) {
+      const boundaryRegex1 = new RegExp(obj1.data._boundary, 'g');
+      const boundaryRegex2 = new RegExp(obj2.data._boundary, 'g');
+    
+      const copyObj1JSON = JSON.stringify(obj1).replace(boundaryRegex1, '');
+      const copyObj2JSON = JSON.stringify(obj2).replace(boundaryRegex2, '');
+    
+      return copyObj1JSON === copyObj2JSON;
+    }
+    
     let file = Buffer.from('test', 'utf8');
     await provisioningClient.uploadProvisioningProfileFile('id', 'servers.dat', file);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${provisioningApiUrl}/users/current/provisioning-profiles/id/servers.dat`,
+
+    sinon.assert.calledOnce(httpClient.request);
+    const [requestOpts, requestedFnName] = httpClient.request.firstCall.args;
+
+    const formData = new FormData();
+    formData.append('file', file, 'serverFile');
+
+    const expectedOpts = {
       method: 'PUT',
+      url: `${provisioningApiUrl}/users/current/provisioning-profiles/id/servers.dat`,
+      data: formData,
       headers: {
+        ...formData.getHeaders(),
         'auth-token': token
       },
-      formData: { 
-        file: { 
-          options: { 
-            filename: 'serverFile' 
-          }, 
-          value: file 
-        } 
-      },
-      json: true,
-    }, 'uploadProvisioningProfileFile');
+    };
+
+    should(isObjectsEqualIgnoringBoundary(requestOpts, expectedOpts) &&
+      requestedFnName === 'uploadProvisioningProfileFile').be.equal(true);
   });
 
   /**

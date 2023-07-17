@@ -1,8 +1,10 @@
 'use strict';
 
 import HttpClient from '../httpClient';
+import should from 'should';
 import sinon from 'sinon';
 import ExpertAdvisorClient from './expertAdvisor.client';
+import FormData from 'form-data';
 
 const provisioningApiUrl = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 
@@ -196,19 +198,37 @@ describe('ExpertAdvisorClient', () => {
    * @test {ExpertAdvisorClient#uploadExpertAdvisorFile}
    */
   it('should upload file to a expert advisor via API', async () => {
+    function isObjectsEqualIgnoringBoundary(obj1, obj2) {
+      const boundaryRegex1 = new RegExp(obj1.data._boundary, 'g');
+      const boundaryRegex2 = new RegExp(obj2.data._boundary, 'g');
+    
+      const copyObj1JSON = JSON.stringify(obj1).replace(boundaryRegex1, '');
+      const copyObj2JSON = JSON.stringify(obj2).replace(boundaryRegex2, '');
+    
+      return copyObj1JSON === copyObj2JSON;
+    }
+    
     let file = Buffer.from('test', 'utf8');
     await expertAdvisorClient.uploadExpertAdvisorFile('id', 'my-ea', file);
-    sinon.assert.calledOnceWithExactly(httpClient.request, {
-      url: `${provisioningApiUrl}/users/current/accounts/id/expert-advisors/my-ea/file`,
+    
+    sinon.assert.calledOnce(httpClient.request);
+    const [requestOpts, requestFnName] = httpClient.request.firstCall.args;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const expectedOpts = {
       method: 'PUT',
+      url: `${provisioningApiUrl}/users/current/accounts/id/expert-advisors/my-ea/file`,
+      data: formData,
       headers: {
+        ...formData.getHeaders(),
         'auth-token': token
-      },
-      formData: {
-        file
-      },
-      json: true,
-    }, 'uploadExpertAdvisorFile');
+      }
+    };
+
+    should(isObjectsEqualIgnoringBoundary(requestOpts, expectedOpts) && 
+      requestFnName === 'uploadExpertAdvisorFile').be.equal(true);
   });
 
   /**

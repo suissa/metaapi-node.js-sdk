@@ -1,3 +1,7 @@
+23.3.3
+ - added sourcemaps for bundles
+ - fixed axios file upload
+
 23.3.2
  - fixed dockerfiles
  - fixed UMD-build
