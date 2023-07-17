@@ -3,6 +3,7 @@
 import fs from 'fs';
 
 import MetaApiClient from '../metaApi.client';
+import FormData from 'form-data';
 
 /**
  * metaapi.cloud provisioning profile API client (see https://metaapi.cloud/docs/provisioning/)
@@ -128,25 +129,22 @@ export default class ProvisioningProfileClient extends MetaApiClient {
     if (this._isNotJwtToken()) {
       return this._handleNoAccessError('uploadProvisioningProfileFile');
     }
+
+    const formData = new FormData();
     if (typeof file === 'string') {
       file = fs.createReadStream(file);
+      formData.append('file', file);
     } else {
-      file = {
-        value: file,
-        options: {
-          filename: 'serverFile'
-        }
-      };
+      formData.append('file', file, 'serverFile');
     }
+
     const opts = {
       method: 'PUT',
       url: `${this._host}/users/current/provisioning-profiles/${provisioningProfileId}/${fileName}`,
-      formData: {
-        file
-      },
-      json: true,
+      data: formData,
       headers: {
-        'auth-token': this._token
+        ...formData.getHeaders(),
+        'auth-token': this._token,
       }
     };
     return this._httpClient.request(opts, 'uploadProvisioningProfileFile');

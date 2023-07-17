@@ -13,7 +13,7 @@ async function testMetaApiSynchronization() {
   try {
     // Add test MetaTrader account
     const accounts = await api.metatraderAccountApi.getAccounts();
-    const account = accounts.find(a => a.login === login && a.type.startsWith('cloud'));
+    let account = accounts.find(a => a.login === login && a.type.startsWith('cloud'));
     if (!account) {
       console.log('Adding MT5 account to MetaApi');
       account = await api.metatraderAccountApi.createAccount({

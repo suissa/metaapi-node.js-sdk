@@ -45,7 +45,7 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/metaapi-node.js-sdk.git"
   },
-  "version": "23.3.2",
+  "version": "23.3.3",
   "dependencies": {
     "@log4js-node/log4js-api": "~1.0.2",
     "axios": "~1.4.0",
@@ -54,6 +54,7 @@
     "bufferutil": "~4.0.7",
     "crypto-browserify": "~3.12.0",
     "crypto-js": "~4.1.1",
+    "form-data": "^4.0.0",
     "fs-extra": "~9.0.1",
     "fuse.js": "~6.6.2",
     "idb": "~5.0.4",
@@ -95,8 +96,8 @@
     "tls": false
   },
   "scripts": {
-    "test-win": "cross-env SWC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
-    "test": "SWC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
+    "test-win": "cross-env SWCRC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
+    "test": "SWCRC=true mocha --exit --require @swc-node/register --require ./aliases.js lib/*/*/*/*.spec.es6 lib/*/*/*.spec.es6 lib/*/*.spec.es6 lib/*.spec.es6",
     "lint:fix": "eslint --ext es6 ./lib --fix",
     "lint": "eslint --ext es6 ./lib",
     "build-win": "npm run clean-win | npm run build:optimized && npm run build:transpile && npm run build:types",

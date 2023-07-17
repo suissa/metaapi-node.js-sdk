@@ -1,6 +1,7 @@
 'use strict';
 
 import MetaApiClient from '../metaApi.client';
+import FormData from 'form-data';
 import fs from 'fs';
 
 /**
@@ -113,17 +114,20 @@ export default class ExpertAdvisorClient extends MetaApiClient {
     if (typeof file === 'string') {
       file = fs.createReadStream(file);
     }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
     const opts = {
       method: 'PUT',
       url: `${this._host}/users/current/accounts/${accountId}/expert-advisors/${expertId}/file`,
-      formData: {
-        file
-      },
-      json: true,
+      data: formData,
       headers: {
+        ...formData.getHeaders(),
         'auth-token': this._token
       }
     };
+
     return this._httpClient.request(opts, 'uploadExpertAdvisorFile');
   }
 
