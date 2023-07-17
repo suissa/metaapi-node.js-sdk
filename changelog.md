@@ -1,3 +1,6 @@
+23.4.0
+ - add type field to MetatraderAccountInformation model
+
 23.3.4
  - restore the original naming of classes and functions in builds
  - change the default build for Node.js

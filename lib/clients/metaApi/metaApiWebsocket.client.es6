@@ -518,25 +518,27 @@ export default class MetaApiWebsocketClient {
   /**
    * MetaTrader account information (see https://metaapi.cloud/docs/client/models/metatraderAccountInformation/)
    * @typedef {Object} MetatraderAccountInformation
-   * @property {String} platform platform id (mt4 or mt5)
-   * @property {String} broker broker name
-   * @property {String} currency account base currency ISO code
-   * @property {String} server broker server name
-   * @property {Number} balance account balance
-   * @property {Number} equity account liquidation value
-   * @property {Number} margin used margin
-   * @property {Number} freeMargin free margin
-   * @property {Number} leverage account leverage coefficient
-   * @property {Number} marginLevel margin level calculated as % of equity/margin
-   * @property {Boolean} tradeAllowed flag indicating that trading is allowed
-   * @property {Boolean} [investorMode] flag indicating that investor password was used (supported for g2 only)
-   * @property {String} marginMode margin calculation mode, one of ACCOUNT_MARGIN_MODE_EXCHANGE,
+   * @property {string} platform platform id (mt4 or mt5)
+   * @property {string} broker broker name
+   * @property {string} currency account base currency ISO code
+   * @property {string} server broker server name
+   * @property {number} balance account balance
+   * @property {number} equity account liquidation value
+   * @property {number} margin used margin
+   * @property {number} freeMargin free margin
+   * @property {number} leverage account leverage coefficient
+   * @property {number} marginLevel margin level calculated as % of equity/margin
+   * @property {boolean} tradeAllowed flag indicating that trading is allowed
+   * @property {boolean} [investorMode] flag indicating that investor password was used (supported for g2 only)
+   * @property {string} marginMode margin calculation mode, one of ACCOUNT_MARGIN_MODE_EXCHANGE,
    * ACCOUNT_MARGIN_MODE_RETAIL_NETTING, ACCOUNT_MARGIN_MODE_RETAIL_HEDGING
-   * @property {String} name Account owner name
-   * @property {Number} login Account login
-   * @property {Number} credit Account credit in the deposit currency
+   * @property {string} name account owner name
+   * @property {number} login account login
+   * @property {number} credit account credit in the deposit currency
    * @property {number} accountCurrencyExchangeRate current exchange rate of account currency into account base currency
    * (USD if you did not override it)
+   * @property {string} type account type, one of ACCOUNT_TRADE_MODE_DEMO, ACCOUNT_TRADE_MODE_CONTEST,
+   * ACCOUNT_TRADE_MODE_REAL
    */
 
   /**

@@ -518,67 +518,67 @@ export default class MetaApiWebsocketClient {
 export declare type MetatraderAccountInformation = {
 
   /**
-   * platform id (mt4 or mt5)
+   * Platform id (mt4 or mt5)
    */
   platform: string,
 
   /**
-   * broker name
+   * Broker name
    */
   broker: string,
 
   /**
-   * account base currency ISO code
+   * Account base currency ISO code
    */
   currency: string,
 
   /**
-   * broker server name
+   * Broker server name
    */
   server: string,
 
   /**
-   * account balance
+   * Account balance
    */
   balance: number,
 
   /**
-   * account liquidation value
+   * Account liquidation value
    */
   equity: number,
 
   /**
-   * used margin
+   * Used margin
    */
   margin: number,
 
   /**
-   * free margin
+   * Free margin
    */
   freeMargin: number,
 
   /**
-   * account leverage coefficient
+   * Account leverage coefficient
    */
   leverage: number,
 
   /**
-   * margin level calculated as % of equity/margin
+   * Margin level calculated as % of equity/margin
    */
   marginLevel: number,
 
   /**
-   * flag indicating that trading is allowed
+   * Flag indicating that trading is allowed
    */
   tradeAllowed: boolean,
 
   /**
-   * flag indicating that investor password was used (supported for g2 only)
+   * Flag indicating that investor password was used (supported for g2 only)
    */
   investorMode?: boolean,
 
   /**
-   * margin calculation mode, one of ACCOUNT_MARGIN_MODE_EXCHANGE,
+   * Margin calculation mode, one of ACCOUNT_MARGIN_MODE_EXCHANGE,
    * ACCOUNT_MARGIN_MODE_RETAIL_NETTING, ACCOUNT_MARGIN_MODE_RETAIL_HEDGING
    */
   marginMode: string,
@@ -601,7 +601,13 @@ export declare type MetatraderAccountInformation = {
   /**
    * Current exchange rate of account currency into account base currency (USD if you did not override it)
    */
-  accountCurrencyExchangeRate?: number
+  accountCurrencyExchangeRate?: number,
+
+  /**
+   * Account type, one of ACCOUNT_TRADE_MODE_DEMO,
+   * ACCOUNT_TRADE_MODE_CONTEST, ACCOUNT_TRADE_MODE_REAL
+   */
+  type: string
 
 }
 
