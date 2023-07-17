@@ -1,3 +1,8 @@
+23.3.4
+ - restore the original naming of classes and functions in builds
+ - change the default build for Node.js
+ - add an inline sourcemap
+
 23.3.3
  - added sourcemaps for bundles
  - fixed axios file upload

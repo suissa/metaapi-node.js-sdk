@@ -1,5 +1,20 @@
+const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+
+const optimization = {
+  minimize: true,
+  minimizer: [
+    new TerserPlugin({
+      terserOptions: {
+        mangle: false,
+        compress: {
+          keep_fnames: true,
+        },
+      },
+    }),
+  ],
+};
 
 /* configs */
 const swcESM = require('./swc/swcrc.esm');
@@ -72,7 +87,9 @@ const webESM = {
       cluster: false,
       querystring: false
     },
-  }
+  },
+
+  optimization
 };
 
 const swcrcUMD = require('./swc/swcrc.umd');
@@ -145,7 +162,9 @@ const webUMD = {
       cluster: false,
       querystring: false
     },
-  }
+  },
+
+  optimization
 };
 
 const swcrcCJS = require('./swc/swcrc.cjs');
@@ -187,6 +206,8 @@ const nodeCJS = {
       'process.env.IS_BROWSER': false
     })
   ],
+
+  optimization
 };
 
 module.exports = [ webESM, webUMD, nodeCJS ];
