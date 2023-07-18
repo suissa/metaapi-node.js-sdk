@@ -667,7 +667,8 @@ export default class MetaApiWebsocketClient {
    * @typedef {Object} MetatraderOrder
    * @property {Number} id order id (ticket number)
    * @property {String} type order type (one of ORDER_TYPE_SELL, ORDER_TYPE_BUY, ORDER_TYPE_BUY_LIMIT,
-   * ORDER_TYPE_SELL_LIMIT, ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP). See
+   * ORDER_TYPE_SELL_LIMIT, ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP, ORDER_TYPE_BUY_STOP_LIMIT,
+   * ORDER_TYPE_SELL_STOP_LIMIT, ORDER_TYPE_CLOSE_BY). See
    * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type
    * @property {String} state order state one of (ORDER_STATE_STARTED, ORDER_STATE_PLACED, ORDER_STATE_CANCELED,
    * ORDER_STATE_PARTIAL, ORDER_STATE_FILLED, ORDER_STATE_REJECTED, ORDER_STATE_EXPIRED, ORDER_STATE_REQUEST_ADD,

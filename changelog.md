@@ -1,3 +1,6 @@
+23.4.1
+ - fix order type enum
+
 23.4.0
  - add type field to MetatraderAccountInformation model
 

@@ -854,7 +854,8 @@ export declare type MetatraderOrder = {
 
   /**
    * order type (one of ORDER_TYPE_SELL, ORDER_TYPE_BUY, ORDER_TYPE_BUY_LIMIT,
-   * ORDER_TYPE_SELL_LIMIT, ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP). See
+   * ORDER_TYPE_SELL_LIMIT, ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP, ORDER_TYPE_BUY_STOP_LIMIT,
+   * ORDER_TYPE_SELL_STOP_LIMIT, ORDER_TYPE_CLOSE_BY). See
    * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type
    */
   type: string,
