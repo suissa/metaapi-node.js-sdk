@@ -1719,8 +1719,11 @@ export default class MetaApiWebsocketClient {
    * @property {Date} [startTime] date of the symbol trade beginning (usually used for futures)
    * @property {Date} [expirationTime] date of the symbol trade end (usually used for futures)
    * @property {number} [pipSize] size of a pip. Pip size is defined for spot and CFD symbols only
-   * @property {number} stopsLevel minimal indention in points from the current close price to place Stop orders
-   * @property {number} freezeLevel distance to freeze trade operations in points
+   * @property {number} stopsLevel minimal distance from the current market price to stop price (SL, TP, open price) in
+   * points. The SL, TP, open price can not be placed closer to market price than this distance
+   * @property {number} freezeLevel distance in points from market price to pending order open price to freeze updates
+   * on the pending order. If the distance between order open price and current market price is less than this value,
+   * then you are not allowed to modify the pending order
    */
 
   /**

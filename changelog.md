@@ -1,4 +1,5 @@
 23.4.0
+ - clarify stopLevel, freezeLevel documentation
  - fix order type enum
  - add type field to MetatraderAccountInformation model
 

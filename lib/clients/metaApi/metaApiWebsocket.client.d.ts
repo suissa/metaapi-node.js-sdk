@@ -1480,7 +1480,8 @@ export declare type MetatraderSymbolSpecification = {
   pipSize?: number,
 
   /**
-   * minimal indention in points from the current close price to place Stop orders
+   * minimal distance from the current market price to stop price (SL, TP, open price) in
+   * points. The SL, TP, open price can not be placed closer to market price than this distance
    */
   stopsLevel: number,
 
