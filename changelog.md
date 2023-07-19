@@ -1,3 +1,8 @@
+23.4.1
+ - added the request URL to the error log
+ - added a detailed error log in the examples
+ - fixed tests for the httpClient
+
 23.4.0
  - clarify stopLevel, freezeLevel documentation
  - fix order type enum

@@ -31,7 +31,7 @@ export function RiskManagementEquityTracking({
 
   const logErr = (...args: unknown[]) => setErrorLog(logs => {
     console.log(...args);
-    return [...logs, ...args];
+    return [...logs, ...args.map((arg: any) => arg.message || arg)];
   });
   const log = (...args: unknown[]) => setResultLog(logs => {
     console.log(...args);

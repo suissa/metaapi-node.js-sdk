@@ -25,7 +25,7 @@ const symbol = ref(props.defaultSymbol);
 
 const logErr = (...args: unknown[]) => {
   console.log(...args);
-  errorLog.value = [...errorLog.value, ...args];
+  errorLog.value = [...errorLog.value, ...args.map((arg: any) => arg.message || arg)];
 };
 const log = (...args: unknown[]) => {
   console.log(...args);

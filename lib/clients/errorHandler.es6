@@ -14,9 +14,10 @@ export class ApiError extends Error {
    * @param {Function} clazz error name
    * @param {Object} message error message
    * @param {number} status HTTP status
+   * @param {string} url API request URL
    */
-  constructor(clazz, message, status) {
-    super(message);
+  constructor(clazz, message, status, url) {
+    super(url? message + '. Request URL: ' + url : message);
     /**
      * Error name
      * @type {string}
@@ -27,7 +28,12 @@ export class ApiError extends Error {
      * @type {number}
      */
     this.status = status;
-    if (isNode) {
+    /**
+     * API request URL
+     */
+    this.url = url;
+
+    if (isNode && Error.captureStackTrace) {
       Error.captureStackTrace(this, clazz);
     }
   }
@@ -74,9 +80,10 @@ export class NotFoundError extends ApiError {
   /**
    * Represents NotFoundError.
    * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message) {
-    super(NotFoundError, message, 404);
+  constructor(message, url) {
+    super(NotFoundError, message, 404, url);
   }
 
 }
@@ -89,9 +96,10 @@ export class ForbiddenError extends ApiError {
   /**
    * Constructs forbidden error.
    * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message) {
-    super(ForbiddenError, message, 403);
+  constructor(message, url) {
+    super(ForbiddenError, message, 403, url);
   }
 
 }
@@ -104,9 +112,10 @@ export class UnauthorizedError extends ApiError {
   /**
    * Constructs unauthorized error.
    * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message) {
-    super(UnauthorizedError, message, 401);
+  constructor(message, url) {
+    super(UnauthorizedError, message, 401, url);
   }
 
 }
@@ -120,9 +129,10 @@ export class ValidationError extends ApiError {
    * Constructs validation error.
    * @param {string} message error message
    * @param {Object} details error data
+   * @param {string} url API request URL
    */
-  constructor(message, details) {
-    super(ValidationError, message, 400);
+  constructor(message, details, url) {
+    super(ValidationError, message, 400, url);
     /**
      * Validation error details
      * @type {Object}
@@ -140,9 +150,10 @@ export class InternalError extends ApiError {
   /**
    * Constructs unexpected error.
    * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message) {
-    super(InternalError, message, 500);
+  constructor(message, url) {
+    super(InternalError, message, 500, url);
   }
 
 }
@@ -154,9 +165,10 @@ export class ConflictError extends ApiError {
   /**
    * Constructs conflict error.
    * @param {string} message error message
+   * @param {string} url API request URL
    */
-  constructor(message) {
-    super(ConflictError, message, 409);
+  constructor(message, url) {
+    super(ConflictError, message, 409, url);
   }
 }
 
@@ -177,8 +189,8 @@ export class TooManyRequestsError extends ApiError {
    * @param {string} message error message
    * @param {TooManyRequestsErrorMetadata} metadata error metadata
    */
-  constructor(message, metadata) {
-    super(TooManyRequestsError, message, 429);
+  constructor(message, metadata, url) {
+    super(TooManyRequestsError, message, 429, url);
     this.metadata = metadata;
   }
 }
