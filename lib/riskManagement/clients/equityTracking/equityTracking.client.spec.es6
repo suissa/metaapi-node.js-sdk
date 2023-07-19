@@ -6,7 +6,7 @@ import PeriodStatisticsListener from './periodStatisticsListener';
 import EquityChartListener from './equityChartListener';
 import sinon from 'sinon';
 import moment from 'moment';
-import 'should';
+import should from 'should';
 
 /**
  * @test {EquityTrackingClient}
