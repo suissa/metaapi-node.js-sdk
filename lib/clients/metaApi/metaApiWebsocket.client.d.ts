@@ -133,24 +133,21 @@ export default class MetaApiWebsocketClient {
   stop(): void;
   
   /**
-   * Returns account information for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readAccountInformation/).
+   * Returns account information for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @returns {Promise<MetatraderAccountInformation>} promise resolving with account information
    */
   getAccountInformation(accountId: string): Promise<MetatraderAccountInformation>;
   
   /**
-   * Returns positions for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPositions/).
+   * Returns positions for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @returns {Promise<Array<MetatraderPosition>} promise resolving with array of open positions
    */
   getPositions(accountId: string): Promise<Array<MetatraderPosition>>;
   
   /**
-   * Returns specific position for a MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPosition/).
+   * Returns specific position for a MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} positionId position id
    * @return {Promise<MetatraderPosition>} promise resolving with MetaTrader position found
@@ -158,16 +155,14 @@ export default class MetaApiWebsocketClient {
   getPosition(accountId: string, positionId: string): Promise<MetatraderPosition>;
   
   /**
-   * Returns open orders for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrders/).
+   * Returns open orders for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @return {Promise<Array<MetatraderOrder>>} promise resolving with open MetaTrader orders
    */
   getOrders(accountId: string): Promise<Array<MetatraderOrder>>;
   
   /**
-   * Returns specific open order for a MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrder/).
+   * Returns specific open order for a MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} orderId order id (ticket number)
    * @return {Promise<MetatraderOrder>} promise resolving with metatrader order found
@@ -175,8 +170,7 @@ export default class MetaApiWebsocketClient {
   getOrder(accountId: string, orderId: string): Promise<MetatraderOrder>;
   
   /**
-   * Returns the history of completed orders for a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTicket/).
+   * Returns the history of completed orders for a specific ticket number
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} ticket ticket number (order id)
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
@@ -184,8 +178,7 @@ export default class MetaApiWebsocketClient {
   getHistoryOrdersByTicket(accountId: string, ticket: string): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns the history of completed orders for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByPosition/)
+   * Returns the history of completed orders for a specific position id
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} positionId position id
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
@@ -193,8 +186,7 @@ export default class MetaApiWebsocketClient {
   getHistoryOrdersByPosition(accountId: string, positionId: string): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns the history of completed orders for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTimeRange/)
+   * Returns the history of completed orders for a specific time range
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
@@ -205,8 +197,7 @@ export default class MetaApiWebsocketClient {
   getHistoryOrdersByTimeRange(accountId: string, startTime: Date, endTime: Date, offset: number, limit: number): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns history deals with a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTicket/).
+   * Returns history deals with a specific ticket number
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} ticket ticket number (deal id for MT5 or order id for MT4)
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
@@ -214,8 +205,7 @@ export default class MetaApiWebsocketClient {
   getDealsByTicket(accountId: string, ticket: string): Promise<MetatraderDeals>;
   
   /**
-   * Returns history deals for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByPosition/).
+   * Returns history deals for a specific position id
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} positionId position id
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
@@ -223,8 +213,7 @@ export default class MetaApiWebsocketClient {
   getDealsByPosition(accountId: string, positionId: string): Promise<MetatraderDeals>;
   
   /**
-   * Returns history deals with for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTimeRange/).
+   * Returns history deals with for a specific time range
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
@@ -235,15 +224,14 @@ export default class MetaApiWebsocketClient {
   getDealsByTimeRange(accountId: string, startTime: Date, endTime: Date, offset: number, limit: number): Promise<MetatraderDeals>;
   
   /**
-   * Clears the order and transaction history of a specified application and removes the application (see
-   * https://metaapi.cloud/docs/client/websocket/api/removeApplication/).
+   * Clears the order and transaction history of a specified application and removes the application
    * @param {string} accountId id of the MetaTrader account to remove history and application for
    * @return {Promise} promise resolving when the history is cleared
    */
   removeApplication(accountId: string): Promise<any>;
   
   /**
-   * Execute a trade on a connected MetaTrader account (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Execute a trade on a connected MetaTrader account
    * @param {string} accountId id of the MetaTrader account to execute trade for
    * @param {MetatraderTrade} trade trade to execute (see docs for possible trade types)
    * @param {string} [application] application to use
@@ -259,7 +247,7 @@ export default class MetaApiWebsocketClient {
   ensureSubscribe(accountId: string, instanceNumber: number): void;
   
   /**
-   * Subscribes to the Metatrader terminal events (see https://metaapi.cloud/docs/client/websocket/api/subscribe/).
+   * Subscribes to the Metatrader terminal events
    * @param {string} accountId id of the MetaTrader account to subscribe to
    * @param {number} [instanceNumber] instance index number
    * @returns {Promise} promise which resolves when subscription started
@@ -268,7 +256,6 @@ export default class MetaApiWebsocketClient {
   
   /**
    * Requests the terminal to start synchronization process
-   * (see https://metaapi.cloud/docs/client/websocket/synchronizing/synchronize/).
    * @param {string} accountId id of the MetaTrader account to synchronize
    * @param {number} instanceIndex instance index
    * @param {string} host name of host to synchronize with
@@ -284,8 +271,7 @@ export default class MetaApiWebsocketClient {
     getHashes: Function): Promise<any>;
   
     /**
-   * Waits for server-side terminal state synchronization to complete.
-   * (see https://metaapi.cloud/docs/client/websocket/synchronizing/waitSynchronized/).
+   * Waits for server-side terminal state synchronization to complete
    * @param {string} accountId id of the MetaTrader account to synchronize
    * @param {number} instanceNumber instance index number
    * @param {string} applicationPattern MetaApi application regular expression pattern, default is .*
@@ -296,8 +282,7 @@ export default class MetaApiWebsocketClient {
   waitSynchronized(accountId: string, instanceNumber: number, applicationPattern: string, timeoutInSeconds: number, application: string): Promise<any>;
   
   /**
-   * Subscribes on market data of specified symbol (see
-   * https://metaapi.cloud/docs/client/websocket/marketDataStreaming/subscribeToMarketData/).
+   * Subscribes on market data of specified symbol
    * @param {string} accountId id of the MetaTrader account
    * @param {string} symbol symbol (e.g. currency pair or an index)
    * @param {Array<MarketDataSubscription>} subscriptions array of market data subscription to create or update
@@ -315,8 +300,7 @@ export default class MetaApiWebsocketClient {
   refreshMarketDataSubscriptions(accountId: string, instanceNumber: number, subscriptions: Array<MarketDataSubscription>): Promise<any>;
   
   /**
-   * Unsubscribes from market data of specified symbol (see
-   * https://metaapi.cloud/docs/client/websocket/marketDataStreaming/unsubscribeFromMarketData/).
+   * Unsubscribes from market data of specified symbol
    * @param {string} accountId id of the MetaTrader account
    * @param {number} instanceNumber instance index
    * @param {string} symbol symbol (e.g. currency pair or an index)
@@ -327,16 +311,14 @@ export default class MetaApiWebsocketClient {
   unsubscribeFromMarketData(accountId: string, instanceNumber: number, symbol: string, subscriptions: Array<MarketDataUnsubscription>, reliability?: string): Promise<any>;
   
   /**
-   * Retrieves symbols available on an account (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbols/).
+   * Retrieves symbols available on an account
    * @param {string} accountId id of the MetaTrader account to retrieve symbols for
    * @returns {Promise<Array<string>>} promise which resolves when symbols are retrieved
    */
   getSymbols(accountId: string): Promise<Array<string>>;
   
   /**
-   * Retrieves specification for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolSpecification/).
+   * Retrieves specification for a symbol
    * @param {string} accountId id of the MetaTrader account to retrieve symbol specification for
    * @param {string} symbol symbol to retrieve specification for
    * @returns {Promise<MetatraderSymbolSpecification>} promise which resolves when specification is retrieved
@@ -344,8 +326,7 @@ export default class MetaApiWebsocketClient {
   getSymbolSpecification(accountId: string, symbol: string): Promise<MetatraderSymbolSpecification>;
   
   /**
-   * Retrieves price for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolPrice/).
+   * Retrieves price for a symbol
    * @param {string} accountId id of the MetaTrader account to retrieve symbol price for
    * @param {string} symbol symbol to retrieve price for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
@@ -356,8 +337,7 @@ export default class MetaApiWebsocketClient {
   getSymbolPrice(accountId: string, symbol: string, keepSubscription?: boolean): Promise<MetatraderSymbolPrice>;
   
   /**
-   * Retrieves price for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readCandle/).
+   * Retrieves price for a symbol
    * @param {string} accountId id of the MetaTrader account to retrieve candle for
    * @param {string} symbol symbol to retrieve candle for
    * @param {string} timeframe defines the timeframe according to which the candle must be generated. Allowed values for
@@ -371,8 +351,7 @@ export default class MetaApiWebsocketClient {
   getCandle(accountId: string, symbol: string, timeframe: string, keepSubscription?: boolean): Promise<MetatraderCandle>;
   
   /**
-   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readTick/).
+   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API
    * @param {string} accountId id of the MetaTrader account to retrieve symbol tick for
    * @param {string} symbol symbol to retrieve tick for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
@@ -383,8 +362,7 @@ export default class MetaApiWebsocketClient {
   getTick(accountId: string, symbol: string, keepSubscription?: boolean): Promise<MetatraderTick>;
   
   /**
-   * Retrieves latest order book for a symbol. MT4 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readBook/).
+   * Retrieves latest order book for a symbol. MT4 accounts do not support this API
    * @param {string} accountId id of the MetaTrader account to retrieve symbol order book for
    * @param {string} symbol symbol to retrieve order book for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
@@ -403,24 +381,21 @@ export default class MetaApiWebsocketClient {
   saveUptime(accountId: string, uptime: Object): Promise<any>;
 
   /**
-   * Unsubscribe from account (see
-   * https://metaapi.cloud/docs/client/websocket/api/synchronizing/unsubscribe).
+   * Unsubscribe from account
    * @param {string} accountId id of the MetaTrader account to unsubscribe
    * @returns {Promise} promise which resolves when socket unsubscribed
    */
   unsubscribe(accountId: string): Promise<void>;
 
   /**
-   * Returns server time for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readServerTime/).
+   * Returns server time for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return server time for
    * @returns {Promise<ServerTime>} promise resolving with server time
    */
   getServerTime(accountId: string): Promise<ServerTime>;
 
   /**
-   * Calculates margin required to open a trade on the specified trading account (see
-   * https://metaapi.cloud/docs/client/websocket/api/calculateMargin/).
+   * Calculates margin required to open a trade on the specified trading account
    * @param {string} accountId id of the trading account to calculate margin for
    * @param {string} application application to send the request to
    * @param {string} reliability account reliability
