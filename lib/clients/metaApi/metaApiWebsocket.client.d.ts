@@ -135,39 +135,45 @@ export default class MetaApiWebsocketClient {
   /**
    * Returns account information for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
+   * @param {GetAccountInformationOptions} [options] additional request options
    * @returns {Promise<MetatraderAccountInformation>} promise resolving with account information
    */
-  getAccountInformation(accountId: string): Promise<MetatraderAccountInformation>;
+  getAccountInformation(accountId: string, options?: GetAccountInformationOptions):
+    Promise<MetatraderAccountInformation>;
   
   /**
    * Returns positions for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
+   * @param {GetPositionsOptions} [options] additional request options
    * @returns {Promise<Array<MetatraderPosition>} promise resolving with array of open positions
    */
-  getPositions(accountId: string): Promise<Array<MetatraderPosition>>;
+  getPositions(accountId: string, options?: GetPositionsOptions): Promise<Array<MetatraderPosition>>;
   
   /**
    * Returns specific position for a MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} positionId position id
+   * @param {GetPositionOptions} [options] additional request options
    * @return {Promise<MetatraderPosition>} promise resolving with MetaTrader position found
    */
-  getPosition(accountId: string, positionId: string): Promise<MetatraderPosition>;
+  getPosition(accountId: string, positionId: string, options?: GetPositionOptions): Promise<MetatraderPosition>;
   
   /**
    * Returns open orders for a specified MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
+   * @param {GetOrdersOptions} [options] additional request options
    * @return {Promise<Array<MetatraderOrder>>} promise resolving with open MetaTrader orders
    */
-  getOrders(accountId: string): Promise<Array<MetatraderOrder>>;
+  getOrders(accountId: string, options?: GetOrdersOptions): Promise<Array<MetatraderOrder>>;
   
   /**
    * Returns specific open order for a MetaTrader account
    * @param {string} accountId id of the MetaTrader account to return information for
    * @param {string} orderId order id (ticket number)
+   * @param {GetOrderOptions} [options] additional request options
    * @return {Promise<MetatraderOrder>} promise resolving with metatrader order found
    */
-  getOrder(accountId: string, orderId: string): Promise<MetatraderOrder>;
+  getOrder(accountId: string, orderId: string, options?: GetOrderOptions): Promise<MetatraderOrder>;
   
   /**
    * Returns the history of completed orders for a specific ticket number
@@ -372,6 +378,21 @@ export default class MetaApiWebsocketClient {
    */
   getBook(accountId: string, symbol: string, keepSubscription?: boolean): Promise<MetatraderBook>
   
+  /**
+   * Forces refresh of most recent quote updates for symbols subscribed to by the terminal
+   * @param {string} accountId id of the MetaTrader account
+   * @returns {Promise<string[]>} promise which resolves with recent quote symbols that was initiated to process
+   */
+  refreshTerminalState(accountId: string): Promise<string[]>;
+
+  /**
+   * Forces refresh and retrieves latest quotes for a subset of symbols the terminal is subscribed to
+   * @param {string} accountId id of the MetaTrader account
+   * @param {string[]} symbols quote symbols to refresh
+   * @returns {Promise<RefreshedQuotes>} refreshed quotes and basic account information info
+   */
+  refreshSymbolQuotes(accountId: string, symbols: string[]): Promise<RefreshedQuotes>;
+
   /**
    * Sends client uptime stats to the server.
    * @param {string} accountId id of the MetaTrader account to save uptime
@@ -589,7 +610,7 @@ export declare type MetatraderAccountInformation = {
 /**
  * Stop loss threshold
  */
- export declare type StopLossThreshold = {
+export declare type StopLossThreshold = {
 
   /**
    * Price threshold relative to position open price, interpreted according to units field value
@@ -1481,7 +1502,7 @@ export declare type MetatraderSymbolPrice = {
   /**
    * bid price
    */
-  bid: string,
+  bid: number,
 
   /**
    * ask price
@@ -1888,4 +1909,69 @@ export declare type MarginOrder = {
      */
     openPrice: number
 
+}
+
+/**
+ * Refreshed quotes and some of account information
+ */
+export declare type RefreshedQuotes = {
+  /**
+   * Refreshed quotes
+   */
+  quotes: MetatraderSymbolPrice[],
+  /**
+   * Actual account balance
+   */
+  balance: number,
+  /**
+   * Actual account equity
+   */
+  equity: number,
+  /**
+   * Actual account margin
+   */
+  margin: number,
+  /**
+   * Actual account free margin
+   */
+  freeMargin: number,
+  /**
+   * Actual account margin level
+   */
+  marginLevel: number,
+  /**
+   * Actual account currency exchange rate
+   */
+  accountCurrencyExchangeRate: number
+}
+
+/**
+ * Options for `getAccountInformation` rpc request
+ */
+export type GetAccountInformationOptions = RefreshTerminalStateFlag;
+/**
+ * Options for `getPositions` rpc request
+ */
+export type GetPositionsOptions = RefreshTerminalStateFlag;
+/**
+ * Options for `getPosition` rpc request
+ */
+export type GetPositionOptions = RefreshTerminalStateFlag;
+/**
+ * Options for `getOrders` rpc request
+ */
+export type GetOrdersOptions = RefreshTerminalStateFlag;
+/**
+ * Options for `getOrder` rpc request
+ */
+export type GetOrderOptions = RefreshTerminalStateFlag;
+
+/**
+ * Refresh terminal state option flag for some requests
+ */
+export type RefreshTerminalStateFlag = {
+  /**
+   * Whether to refresh terminal state before retrieving the data, slowing down the request
+   */
+  refreshTerminalState?: boolean
 }

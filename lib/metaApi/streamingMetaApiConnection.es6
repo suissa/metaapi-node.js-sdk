@@ -38,7 +38,7 @@ export default class StreamingMetaApiConnection extends MetaApiConnection {
     this._connectionRegistry = connectionRegistry;
     this._historyStartTime = historyStartTime;
     this._terminalHashManager = terminalHashManager;
-    this._terminalState = new TerminalState(account, terminalHashManager, account.server);
+    this._terminalState = new TerminalState(account, terminalHashManager, this._websocketClient);
     this._historyStorage = historyStorage || new MemoryHistoryStorage();
     this._healthMonitor = new ConnectionHealthMonitor(this);
     this._websocketClient.addSynchronizationListener(account.id, this);
@@ -78,8 +78,7 @@ export default class StreamingMetaApiConnection extends MetaApiConnection {
   }
 
   /**
-   * Clears the order and transaction history of a specified application and removes application (see
-   * https://metaapi.cloud/docs/client/websocket/api/removeApplication/).
+   * Clears the order and transaction history of a specified application and removes application
    * @return {Promise} promise resolving when the history is cleared and application is removed
    */
   removeApplication() {

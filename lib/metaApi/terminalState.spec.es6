@@ -3,14 +3,17 @@
 import should from 'should';
 import sinon from 'sinon';
 import TerminalState from './terminalState';
+import MetaApiWebsocketClient from '../clients/metaApi/metaApiWebsocket.client';
+import {HandlePromise} from '../helpers/promises';
+import * as helpers from '../helpers/helpers';
 
 /**
  * @test {TerminalState}
  */
 describe('TerminalState', () => {
 
-  let state, sandbox, account, terminalHashManager, 
-    specificationsStub, positionsStub, ordersStub, clock;
+  let state, sandbox, account, terminalHashManager,  specificationsStub, positionsStub, ordersStub, clock;
+  let websocketClient;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -44,11 +47,12 @@ describe('TerminalState', () => {
       addOrderReference: () => {},
       removeOrderReference: () => {}
     };
+    websocketClient = sandbox.createStubInstance(MetaApiWebsocketClient);
     positionsStub = sandbox.stub(terminalHashManager, 'getPositionsByHash').returns({1: {id: '1', profit: 10}});
     ordersStub = sandbox.stub(terminalHashManager, 'getOrdersByHash').returns({1: {id: '1', openPrice: 10}});
     specificationsStub = sandbox.stub(terminalHashManager, 'getSpecificationsByHash')
       .returns({EURUSD: {symbol: 'EURUSD', tickSize: 0.00001}});
-    state = new TerminalState(account, terminalHashManager);
+    state = new TerminalState(account, terminalHashManager, websocketClient);
   });
 
   afterEach(() => {
@@ -978,6 +982,106 @@ describe('TerminalState', () => {
     await state.onDisconnected('vint-hill:1:ps-mpa-2');
     should(state._stateByInstanceIndex['vint-hill:1:ps-mpa-1']).not.eql(undefined);
     should(state._stateByInstanceIndex['vint-hill:1:ps-mpa-2']).not.eql(undefined);
+  });
+
+  /**
+   * @test {TerminalState#refreshTerminalState}
+   */
+  describe('refreshTerminalState', () => {
+
+    beforeEach(() => {
+      clock.restore();
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should initiate refreshing terminal state and wait for all refreshed prices received', async () => {
+      websocketClient.refreshTerminalState.resolves(['EURUSD', 'BTCUSD']);
+      let promise = new HandlePromise(state.refreshTerminalState());
+      
+      state.onSymbolPricesUpdated(0, [{symbol: 'EURUSD'}]);
+      await helpers.delay(5);
+      promise.completed.should.be.false();
+
+      state.onSymbolPricesUpdated(0, [{symbol: 'BTCUSD'}]);
+      await promise;
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should time out waiting refreshed prices receival', async () => {
+      websocketClient.refreshTerminalState.resolves(['EURUSD', 'BTCUSD']);
+      let promise = new HandlePromise(state.refreshTerminalState({timeoutInSeconds: 0.01}));
+      state.onSymbolPricesUpdated(0, [{symbol: 'EURUSD'}]);
+
+      try {
+        await promise;
+        throw new Error('assert');
+      } catch (err) {
+        err.name.should.equal('TimeoutError');
+      }
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should not raise unhandled rejection if ws request fails after waiting prices timed out', async () => {
+      websocketClient.refreshTerminalState.callsFake(async () => {
+        await helpers.delay(10);
+        throw new Error('test');
+      });
+      try {
+        await state.refreshTerminalState({timeoutInSeconds: 0.001}); // timeout is 1 ms
+        throw new Error('assert');
+      } catch (err) {
+        err.name.should.equal('TimeoutError');
+        sinon.assert.calledOnce(websocketClient.refreshTerminalState);
+        await helpers.delay(15);
+      }
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should not wait for any symbols if no symbols initiated to refresh', async () => {
+      websocketClient.refreshTerminalState.resolves([]);
+      await state.refreshTerminalState();
+      sinon.assert.calledOnce(websocketClient.refreshTerminalState);
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should not wait for symbols if they were already received before the refresh call completed', async () => {
+      websocketClient.refreshTerminalState.callsFake(async () => {
+        state.onSymbolPricesUpdated(0, [{symbol: 'EURUSD'}, {symbol: 'BTCUSD'}]);
+        return ['EURUSD', 'BTCUSD'];
+      });
+      await state.refreshTerminalState();
+      sinon.assert.calledOnce(websocketClient.refreshTerminalState);
+    });
+
+    /**
+     * @test {TerminalState#refreshTerminalState}
+     */
+    it('should not conflict when waiting for different call resolving', async () => {
+      websocketClient.refreshTerminalState
+        .onCall(0).resolves(['EURUSD', 'BTCUSD'])
+        .onCall(1).resolves(['EURUSD', 'AUDUSD']);
+
+      let promise1 = state.refreshTerminalState();
+      await helpers.delay(5);
+      let promise2 = state.refreshTerminalState();
+      await helpers.delay(5);
+
+      state.onSymbolPricesUpdated(0, [{symbol: 'EURUSD'}, {symbol: 'BTCUSD'}, {symbol: 'AUDUSD'}]);
+      await promise1;
+      await promise2;
+      sinon.assert.callCount(websocketClient.refreshTerminalState, 2);
+    });
+
   });
 
 });

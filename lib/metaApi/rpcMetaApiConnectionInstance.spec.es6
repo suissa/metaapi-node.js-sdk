@@ -125,9 +125,9 @@ describe('RpcMetaApiConnectionInstance', () => {
       marginLevel: 3967.58283542
     };
     sandbox.stub(client, 'getAccountInformation').resolves(accountInformation);
-    let actual = await api.getAccountInformation();
+    let actual = await api.getAccountInformation({refreshTerminalState: true});
     actual.should.match(accountInformation);
-    sinon.assert.calledWith(client.getAccountInformation, 'accountId');
+    sinon.assert.calledWith(client.getAccountInformation, 'accountId', {refreshTerminalState: true});
   });
 
   /**
@@ -182,9 +182,9 @@ describe('RpcMetaApiConnectionInstance', () => {
       realizedProfit: -6.536993168992922e-13
     }];
     sandbox.stub(client, 'getPositions').resolves(positions);
-    let actual = await api.getPositions();
+    let actual = await api.getPositions({refreshTerminalState: true});
     actual.should.match(positions);
-    sinon.assert.calledWith(client.getPositions, 'accountId');
+    sinon.assert.calledWith(client.getPositions, 'accountId', {refreshTerminalState: true});
   });
 
   /**
@@ -212,9 +212,9 @@ describe('RpcMetaApiConnectionInstance', () => {
       realizedProfit: -6.536993168992922e-13
     };
     sandbox.stub(client, 'getPosition').resolves(position);
-    let actual = await api.getPosition('46214692');
+    let actual = await api.getPosition('46214692', {refreshTerminalState: true});
     actual.should.match(position);
-    sinon.assert.calledWith(client.getPosition, 'accountId', '46214692');
+    sinon.assert.calledWith(client.getPosition, 'accountId', '46214692', {refreshTerminalState: true});
   });
 
   /**
@@ -237,9 +237,9 @@ describe('RpcMetaApiConnectionInstance', () => {
       comment: 'COMMENT2'
     }];
     sandbox.stub(client, 'getOrders').resolves(orders);
-    let actual = await api.getOrders();
+    let actual = await api.getOrders({refreshTerminalState: true});
     actual.should.match(orders);
-    sinon.assert.calledWith(client.getOrders, 'accountId');
+    sinon.assert.calledWith(client.getOrders, 'accountId', {refreshTerminalState: true});
   });
 
   /**
@@ -262,9 +262,9 @@ describe('RpcMetaApiConnectionInstance', () => {
       comment: 'COMMENT2'
     };
     sandbox.stub(client, 'getOrder').resolves(order);
-    let actual = await api.getOrder('46871284');
+    let actual = await api.getOrder('46871284', {refreshTerminalState: true});
     actual.should.match(order);
-    sinon.assert.calledWith(client.getOrder, 'accountId', '46871284');
+    sinon.assert.calledWith(client.getOrder, 'accountId', '46871284', {refreshTerminalState: true});
   });
 
   /**

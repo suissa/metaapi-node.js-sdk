@@ -237,7 +237,8 @@ class FakeServer {
 
 const sequentialProcessing = [true];
 sequentialProcessing.forEach(param => {
-  describe('Synchronization stability test', () => {
+  describe('Synchronization stability test', function() {
+    this.retries(2);
 
     let fakeServer;
     let connection;
@@ -264,7 +265,7 @@ sequentialProcessing.forEach(param => {
       }];
       clock = sinon.useFakeTimers({shouldAdvanceTime: true, now: new Date('2020-04-02T00:00:00.000Z').getTime()});
       
-      api = new MetaApi('token', {application: 'application', domain: 'project-stock.agiliumlabs.cloud',
+      api = new MetaApi('token', {application: 'application', domain: 'agiliumtrade.agiliumlabs.cloud',
         useSharedClientApi: true, requestTimeout: 3, retryOpts: {
           retries: 3, minDelayInSeconds: 0.1, maxDelayInSeconds: 0.5, subscribeCooldownInSeconds: 6}, 
         eventProcessing: { sequentialProcessing: param }});

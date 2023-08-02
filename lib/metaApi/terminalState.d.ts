@@ -1,6 +1,9 @@
-import { MetatraderAccountInformation, MetatraderOrder, MetatraderPosition, MetatraderSymbolPrice, MetatraderSymbolSpecification } from "../clients/metaApi/metaApiWebsocket.client";
-import ClientApiClient from "../clients/metaApi/clientApi.client";
+import MetaApiWebsocketClient, {
+  MetatraderAccountInformation, MetatraderOrder, MetatraderPosition, MetatraderSymbolPrice,
+  MetatraderSymbolSpecification
+} from "../clients/metaApi/metaApiWebsocket.client";
 import SynchronizationListener from "../clients/metaApi/synchronizationListener";
+import TerminalHashManager from './terminalHashManager';
 
 /**
  * Responsible for storing a local copy of remote terminal state
@@ -10,9 +13,10 @@ export default class TerminalState extends SynchronizationListener {
   /**
    * Constructs the instance of terminal state class
    * @param {string} accountId account id
-   * @param {ClientApiClient} clientApiClient client API client
+   * @param {TerminalHashManager} terminalHashManager terminal hash manager
+   * @param {MetaApiWebsocketClient} websocketClient websocket client
    */
-  constructor(accountId: string, clientApiClient: ClientApiClient);
+  constructor(accountId: string, terminalHashManager: TerminalHashManager, websocketClient: MetaApiWebsocketClient);
   
   /**
    * Returns true if MetaApi have connected to MetaTrader terminal
@@ -202,6 +206,15 @@ export default class TerminalState extends SynchronizationListener {
   onStreamClosed(instanceIndex: string): Promise<any>;
 
   /**
+   * Forces refresh of most recent quote updates for symbols subscribed to by the terminal, and waits for them all to
+   * be processed by this terminal state. This method does not waits for all other listeners to receive and process the
+   * quote updates
+   * @param {RefreshTerminalStateOptions} [options] additional options
+   * @returns {Promise} promise resolving when the terminal state received and processed the latest quotes
+   */
+  refreshTerminalState(options: RefreshTerminalStateOptions): Promise<void>;
+
+  /**
    * Removes connection related data from terminal hash manager
    */
   close(): void;
@@ -222,4 +235,14 @@ export declare type QuoteTime = {
    */
   brokerTime: string
 
+}
+
+/**
+ * Options for refreshing terminal state
+ */
+export declare type RefreshTerminalStateOptions = {
+  /**
+   * Timeout in seconds. Defaults to `10`
+   */
+  timeoutInSeconds?: number
 }

@@ -31,8 +31,7 @@ export default class StreamingMetaApiConnection extends MetaApiConnection {
     historyStartTime?: Date, refreshSubscriptionsOpts?: RefreshSubscriptionsOpts);
   
   /**
-   * Clears the order and transaction history of a specified application and removes application (see
-   * https://metaapi.cloud/docs/client/websocket/api/removeApplication/).
+   * Clears the order and transaction history of a specified application and removes application
    * @return {Promise} promise resolving when the history is cleared and application is removed
    */
   removeApplication(): Promise<any>;

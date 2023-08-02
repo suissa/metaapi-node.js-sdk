@@ -516,135 +516,24 @@ export default class MetaApiWebsocketClient {
   }
 
   /**
-   * MetaTrader account information (see https://metaapi.cloud/docs/client/models/metatraderAccountInformation/)
-   * @typedef {Object} MetatraderAccountInformation
-   * @property {string} platform platform id (mt4 or mt5)
-   * @property {string} broker broker name
-   * @property {string} currency account base currency ISO code
-   * @property {string} server broker server name
-   * @property {number} balance account balance
-   * @property {number} equity account liquidation value
-   * @property {number} margin used margin
-   * @property {number} freeMargin free margin
-   * @property {number} leverage account leverage coefficient
-   * @property {number} marginLevel margin level calculated as % of equity/margin
-   * @property {boolean} tradeAllowed flag indicating that trading is allowed
-   * @property {boolean} [investorMode] flag indicating that investor password was used (supported for g2 only)
-   * @property {string} marginMode margin calculation mode, one of ACCOUNT_MARGIN_MODE_EXCHANGE,
-   * ACCOUNT_MARGIN_MODE_RETAIL_NETTING, ACCOUNT_MARGIN_MODE_RETAIL_HEDGING
-   * @property {string} name account owner name
-   * @property {number} login account login
-   * @property {number} credit account credit in the deposit currency
-   * @property {number} accountCurrencyExchangeRate current exchange rate of account currency into account base currency
-   * (USD if you did not override it)
-   * @property {string} type account type, one of ACCOUNT_TRADE_MODE_DEMO, ACCOUNT_TRADE_MODE_CONTEST,
-   * ACCOUNT_TRADE_MODE_REAL
-   */
-
-  /**
    * Returns account information for a specified MetaTrader account.
    * @param {String} accountId id of the MetaTrader account to return information for
+   * @param {GetAccountInformationOptions} [options] additional request options
    * @returns {Promise<MetatraderAccountInformation>} promise resolving with account information
    */
-  async getAccountInformation(accountId) {
-    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getAccountInformation'});
+  async getAccountInformation(accountId, options) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getAccountInformation', ...options});
     return response.accountInformation;
   }
 
   /**
-   * Stop loss threshold
-   * @typedef {Object} StopLossThreshold
-   * @property {Number} threshold price threshold relative to position open price, interpreted according to units
-   * field value
-   * @property {Number} stopLoss stop loss value, interpreted according to units and basePrice field values
-   */
-
-  /**
-   * Threshold trailing stop loss configuration
-   * @typedef {Object} ThresholdTrailingStopLoss
-   * @property {StopLossThreshold[]} thresholds stop loss thresholds
-   * @property {String} [units] threshold stop loss units. ABSOLUTE_PRICE means the that the value of stop loss
-   * threshold fields contain a final threshold & stop loss value. RELATIVE* means that the threshold fields value
-   * contains relative threshold & stop loss values, expressed either in price, points, pips, account currency or
-   * balance percentage. Default is ABSOLUTE_PRICE. One of ABSOLUTE_PRICE, RELATIVE_PRICE, RELATIVE_POINTS,
-   * RELATIVE_PIPS, RELATIVE_CURRENCY, RELATIVE_BALANCE_PERCENTAGE
-   * @property {String} [stopPriceBase] defined the base price to calculate SL relative to for POSITION_MODIFY and
-   * pending order requests. Default is OPEN_PRICE. One of CURRENT_PRICE, OPEN_PRICE
-   */
-
-  /**
-   * Distance trailing stop loss configuration
-   * @typedef {Object} DistanceTrailingStopLoss
-   * @property {Number} [distance] SL distance relative to current price, interpreted according to units field value
-   * @property {String} [units] distance trailing stop loss units. RELATIVE_* means that the distance field value 
-   * contains relative stop loss expressed either in price, points, pips, account currency or balance percentage. 
-   * Default is RELATIVE_PRICE. One of RELATIVE_PRICE, RELATIVE_POINTS, RELATIVE_PIPS, RELATIVE_CURRENCY,
-   * RELATIVE_BALANCE_PERCENTAGE
-   */
-
-  /**
-   * Distance trailing stop loss configuration
-   * @typedef {Object} TrailingStopLoss
-   * @property {DistanceTrailingStopLoss} [distance] distance trailing stop loss configuration. If both distance and
-   * threshold TSL are set, then the resulting SL will be the one which is closest to the current price
-   * @property {ThresholdTrailingStopLoss} [threshold] distance trailing stop loss configuration. If both distance and
-   * threshold TSL are set, then the resulting SL will be the one which is closest to the current price
-   */
-
-  /**
-   * MetaTrader position
-   * @typedef {Object} MetatraderPosition
-   * @property {Number} id position id (ticket number)
-   * @property {String} type position type (one of POSITION_TYPE_BUY, POSITION_TYPE_SELL)
-   * @property {String} symbol position symbol
-   * @property {Number} magic position magic number, identifies the EA which opened the position
-   * @property {Date} time time position was opened at
-   * @property {String} brokerTime time position was opened at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format
-   * @property {Date} updateTime last position modification time
-   * @property {Number} openPrice position open price
-   * @property {Number} currentPrice current price
-   * @property {Number} currentTickValue current tick value
-   * @property {Number} [stopLoss] optional position stop loss price
-   * @property {Number} [takeProfit] optional position take profit price
-   * @property {TrailingStopLoss} [trailingStopLoss] distance trailing stop loss configuration
-   * @property {Number} volume position volume
-   * @property {Number} profit position cumulative profit, including unrealized profit resulting from currently open
-   * position part (except swap and commissions) and realized profit resulting from partially closed position part
-   * and including swap and commissions
-   * @property {Number} realizedProfit profit of the already closed part, including commissions and swap (realized and
-   * unrealized)
-   * @property {Number} unrealizedProfit profit of the part of the position which is not yet closed, excluding swap and
-   * commissions
-   * @property {Number} swap position cumulative swap, including both swap from currently open position part (unrealized
-   * swap) and swap from partially closed position part (realized swap)
-   * @property {Number} realizedSwap swap from partially closed position part
-   * @property {Number} unrealizedSwap swap resulting from currently open position part
-   * @property {Number} commission total position commissions, resulting both from currently open and closed position
-   * parts
-   * @property {Number} realizedCommission position realized commission, resulting from partially closed position part
-   * @property {Number} unrealizedCommission position unrealized commission, resulting from currently open position part
-   * @property {String} [comment] optional position comment. The sum of the line lengths of the comment and the clientId
-   * must be less than or equal to 26. For more information see https://metaapi.cloud/docs/client/clientIdUsage/
-   * @property {String} [clientId] optional client-assigned id. The id value can be assigned when submitting a trade and
-   * will be present on position, history orders and history deals related to the trade. You can use this field to bind
-   * your trades to objects in your application and then track trade progress. The sum of the line lengths of the
-   * comment and the clientId must be less than or equal to 26. For more information see
-   * https://metaapi.cloud/docs/client/clientIdUsage/
-   * @property {String} reason position opening reason. One of POSITION_REASON_CLIENT, POSITION_REASON_EXPERT,
-   * POSITION_REASON_MOBILE, POSITION_REASON_WEB, POSITION_REASON_UNKNOWN. See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/positionproperties#enum_position_reason',
-   * @property {Number} [accountCurrencyExchangeRate] current exchange rate of account currency into account base
-   * currency (USD if you did not override it)
-   * @property {String} [brokerComment] current comment value on broker side (possibly overriden by the broker)
-   */
-
-  /**
    * Returns positions for a specified MetaTrader account.
    * @param {String} accountId id of the MetaTrader account to return information for
+   * @param {GetPositionsOptions} [options] additional request options
    * @returns {Promise<Array<MetatraderPosition>} promise resolving with array of open positions
    */
-  async getPositions(accountId) {
-    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getPositions'});
+  async getPositions(accountId, options) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getPositions', ...options});
     return response.positions;
   }
 
@@ -652,75 +541,22 @@ export default class MetaApiWebsocketClient {
    * Returns specific position for a MetaTrader account.
    * @param {String} accountId id of the MetaTrader account to return information for
    * @param {String} positionId position id
+   * @param {GetPositionOptions} [options] additional request options
    * @return {Promise<MetatraderPosition>} promise resolving with MetaTrader position found
    */
-  async getPosition(accountId, positionId) {
-    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getPosition', positionId});
+  async getPosition(accountId, positionId, options) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getPosition', positionId, ...options});
     return response.position;
   }
 
   /**
-   * MetaTrader order
-   * @typedef {Object} MetatraderOrder
-   * @property {Number} id order id (ticket number)
-   * @property {String} type order type (one of ORDER_TYPE_SELL, ORDER_TYPE_BUY, ORDER_TYPE_BUY_LIMIT,
-   * ORDER_TYPE_SELL_LIMIT, ORDER_TYPE_BUY_STOP, ORDER_TYPE_SELL_STOP, ORDER_TYPE_BUY_STOP_LIMIT,
-   * ORDER_TYPE_SELL_STOP_LIMIT, ORDER_TYPE_CLOSE_BY). See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type
-   * @property {String} state order state one of (ORDER_STATE_STARTED, ORDER_STATE_PLACED, ORDER_STATE_CANCELED,
-   * ORDER_STATE_PARTIAL, ORDER_STATE_FILLED, ORDER_STATE_REJECTED, ORDER_STATE_EXPIRED, ORDER_STATE_REQUEST_ADD,
-   * ORDER_STATE_REQUEST_MODIFY, ORDER_STATE_REQUEST_CANCEL). See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_state
-   * @property {Number} magic order magic number, identifies the EA which created the order
-   * @property {Date} time time order was created at
-   * @property {String} brokerTime time time order was created at, in broker timezone, YYYY-MM-DD HH:mm:ss.SSS format
-   * @property {Date} [doneTime] time order was executed or canceled at. Will be specified for
-   * completed orders only
-   * @property {String} [doneBrokerTime] time order was executed or canceled at, in broker timezone,
-   * YYYY-MM-DD HH:mm:ss.SSS format. Will be specified for completed orders only
-   * @property {String} symbol order symbol
-   * @property {Number} openPrice order open price (market price for market orders, limit price for limit orders or stop
-   * price for stop orders)
-   * @property {Number} [currentPrice] current price, filled for pending orders only. Not filled for history orders.
-   * @property {Number} [stopLoss] order stop loss price
-   * @property {Number} [takeProfit] order take profit price
-   * @property {TrailingStopLoss} [trailingStopLoss] distance trailing stop loss configuration
-   * @property {Number} volume order requested quantity
-   * @property {Number} currentVolume order remaining quantity, i.e. requested quantity - filled quantity
-   * @property {String} positionId order position id. Present only if the order has a position attached to it
-   * @property {String} [comment] order comment. The sum of the line lengths of the comment and the clientId
-   * must be less than or equal to 26. For more information see https://metaapi.cloud/docs/client/clientIdUsage/
-   * @property {String} [brokerComment] current comment value on broker side (possibly overriden by the broker)
-   * @property {String} [clientId] client-assigned id. The id value can be assigned when submitting a trade and
-   * will be present on position, history orders and history deals related to the trade. You can use this field to bind
-   * your trades to objects in your application and then track trade progress. The sum of the line lengths of the
-   * comment and the clientId must be less than or equal to 26. For more information see
-   * https://metaapi.cloud/docs/client/clientIdUsage/
-   * @property {String} platform platform id (mt4 or mt5)
-   * @property {String} reason order opening reason. One of ORDER_REASON_CLIENT, ORDER_REASON_MOBILE, ORDER_REASON_WEB,
-   * ORDER_REASON_EXPERT, ORDER_REASON_SL, ORDER_REASON_TP, ORDER_REASON_SO, ORDER_REASON_UNKNOWN. See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_reason.
-   * @property {String} fillingMode order filling mode. One of ORDER_FILLING_FOK, ORDER_FILLING_IOC,
-   * ORDER_FILLING_RETURN. See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_filling.
-   * @property {String} expirationType order expiration type. One of ORDER_TIME_GTC, ORDER_TIME_DAY,
-   * ORDER_TIME_SPECIFIED, ORDER_TIME_SPECIFIED_DAY. See
-   * https://www.mql5.com/en/docs/constants/tradingconstants/orderproperties#enum_order_type_time
-   * @property {Date} expirationTime optional order expiration time
-   * @property {Number} [accountCurrencyExchangeRate] current exchange rate of account currency into account base
-   * currency (USD if you did not override it)
-   * @property {String} [closeByPositionId] identifier of an opposite position used for closing by order
-   * ORDER_TYPE_CLOSE_BY
-   * @property {Number} [stopLimitPrice] the Limit order price for the StopLimit order
-   */
-
-  /**
    * Returns open orders for a specified MetaTrader account.
    * @param {String} accountId id of the MetaTrader account to return information for
+   * @param {GetOrdersOptions} [options] additional request options
    * @return {Promise<Array<MetatraderOrder>>} promise resolving with open MetaTrader orders
    */
-  async getOrders(accountId) {
-    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getOrders'});
+  async getOrders(accountId, options) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getOrders', ...options});
     return response.orders;
   }
 
@@ -728,10 +564,11 @@ export default class MetaApiWebsocketClient {
    * Returns specific open order for a MetaTrader account.
    * @param {String} accountId id of the MetaTrader account to return information for
    * @param {String} orderId order id (ticket number)
+   * @param {GetOrderOptions} [options] additional request options
    * @return {Promise<MetatraderOrder>} promise resolving with metatrader order found
    */
-  async getOrder(accountId, orderId) {
-    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getOrder', orderId});
+  async getOrder(accountId, orderId, options) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getOrder', orderId, ...options});
     return response.order;
   }
 
@@ -1138,6 +975,27 @@ export default class MetaApiWebsocketClient {
   async getBook(accountId, symbol, keepSubscription = false) {
     let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'getBook', symbol, keepSubscription});
     return response.book;
+  }
+
+  /**
+   * Forces refresh of most recent quote updates for symbols subscribed to by the terminal
+   * @param {string} accountId id of the MetaTrader account
+   * @returns {Promise<string[]>} promise which resolves with recent quote symbols that was initiated to process
+   */
+  async refreshTerminalState(accountId) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'refreshTerminalState'});
+    return response.symbols;
+  }
+
+  /**
+   * Forces refresh and retrieves latest quotes for a subset of symbols the terminal is subscribed to
+   * @param {string} accountId id of the MetaTrader account
+   * @param {string[]} symbols quote symbols to refresh
+   * @returns {Promise<RefreshedQuotes>} refreshed quotes and basic account information info
+   */
+  async refreshSymbolQuotes(accountId, symbols) {
+    let response = await this.rpcRequest(accountId, {application: 'RPC', type: 'refreshSymbolQuotes', symbols});
+    return response.refreshedQuotes;
   }
 
   /**

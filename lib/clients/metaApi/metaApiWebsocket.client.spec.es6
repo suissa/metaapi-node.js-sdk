@@ -411,138 +411,235 @@ describe('MetaApiWebsocketClient', () => {
   /**
    * @test {MetaApiWebsocketClient#getAccountInformation}
    */
-  it('should retrieve MetaTrader account information from API', async () => {
-    server.on('request', data => {
-      if (data.type === 'getAccountInformation' && data.accountId === 'accountId' &&
-        data.application === 'RPC') {
+  describe('getAccountInformation', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#getAccountInformation}
+     */
+    it('should retrieve MetaTrader account information from API', async () => {
+      server.on('request', data => {
+        should(data.refreshTerminalState).be.undefined();
+        if (data.type === 'getAccountInformation' && data.accountId === 'accountId' && data.application === 'RPC') {
+          server.emit('response', {
+            type: 'response', accountId: data.accountId, requestId: data.requestId,
+            accountInformation
+          });
+        }
+      });
+      let actual = await client.getAccountInformation('accountId');
+      actual.should.match(accountInformation);
+    });
+
+    /**
+     * @test {MetaApiWebsocketClient#getAccountInformation}
+     */
+    it('should set refresh terminal state flag if it is specified', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'getAccountInformation', refreshTerminalState: true});
         server.emit('response', {
           type: 'response', accountId: data.accountId, requestId: data.requestId,
           accountInformation
         });
-      }
+      });
+      await client.getAccountInformation('accountId', {refreshTerminalState: true});
     });
-    let actual = await client.getAccountInformation('accountId');
-    actual.should.match(accountInformation);
+
   });
 
   /**
    * @test {MetaApiWebsocketClient#getPositions}
    */
-  it('should retrieve MetaTrader positions from API', async () => {
-    let positions = [{
-      id: '46214692',
-      type: 'POSITION_TYPE_BUY',
-      symbol: 'GBPUSD',
-      magic: 1000,
-      time: new Date('2020-04-15T02:45:06.521Z'),
-      updateTime: new Date('2020-04-15T02:45:06.521Z'),
-      openPrice: 1.26101,
-      currentPrice: 1.24883,
-      currentTickValue: 1,
-      volume: 0.07,
-      swap: 0,
-      profit: -85.25999999999966,
-      commission: -0.25,
-      clientId: 'TE_GBPUSD_7hyINWqAlE',
-      stopLoss: 1.17721,
-      unrealizedProfit: -85.25999999999901,
-      realizedProfit: -6.536993168992922e-13
-    }];
-    server.on('request', data => {
-      if (data.type === 'getPositions' && data.accountId === 'accountId' && data.application === 'RPC') {
-        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, positions});
-      }
+  describe('getPositions', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#getPositions}
+     */
+    it('should retrieve MetaTrader positions from API', async () => {
+      let positions = [{
+        id: '46214692',
+        type: 'POSITION_TYPE_BUY',
+        symbol: 'GBPUSD',
+        magic: 1000,
+        time: new Date('2020-04-15T02:45:06.521Z'),
+        updateTime: new Date('2020-04-15T02:45:06.521Z'),
+        openPrice: 1.26101,
+        currentPrice: 1.24883,
+        currentTickValue: 1,
+        volume: 0.07,
+        swap: 0,
+        profit: -85.25999999999966,
+        commission: -0.25,
+        clientId: 'TE_GBPUSD_7hyINWqAlE',
+        stopLoss: 1.17721,
+        unrealizedProfit: -85.25999999999901,
+        realizedProfit: -6.536993168992922e-13
+      }];
+      server.on('request', data => {
+        should(data.refreshTerminalState).be.undefined();
+        if (data.type === 'getPositions' && data.accountId === 'accountId' && data.application === 'RPC') {
+          server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, positions});
+        }
+      });
+      let actual = await client.getPositions('accountId');
+      actual.should.match(positions);
     });
-    let actual = await client.getPositions('accountId');
-    actual.should.match(positions);
+
+    /**
+     * @test {MetaApiWebsocketClient#getPositions}
+     */
+    it('should set refresh terminal state flag if it is specified', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'getPositions', refreshTerminalState: true});
+        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId});
+      });
+      await client.getPositions('accountId', {refreshTerminalState: true});
+    });
+
   });
 
   /**
    * @test {MetaApiWebsocketClient#getPosition}
    */
-  it('should retrieve MetaTrader position from API by id', async () => {
-    let position = {
-      id: '46214692',
-      type: 'POSITION_TYPE_BUY',
-      symbol: 'GBPUSD',
-      magic: 1000,
-      time: new Date('2020-04-15T02:45:06.521Z'),
-      updateTime: new Date('2020-04-15T02:45:06.521Z'),
-      openPrice: 1.26101,
-      currentPrice: 1.24883,
-      currentTickValue: 1,
-      volume: 0.07,
-      swap: 0,
-      profit: -85.25999999999966,
-      commission: -0.25,
-      clientId: 'TE_GBPUSD_7hyINWqAlE',
-      stopLoss: 1.17721,
-      unrealizedProfit: -85.25999999999901,
-      realizedProfit: -6.536993168992922e-13
-    };
-    server.on('request', data => {
-      if (data.type === 'getPosition' && data.accountId === 'accountId' && data.positionId === '46214692' &&
-        data.application === 'RPC') {
-        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, position});
-      }
+  describe('getPosition', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#getPosition}
+     */
+    it('should retrieve MetaTrader position from API by id', async () => {
+      let position = {
+        id: '46214692',
+        type: 'POSITION_TYPE_BUY',
+        symbol: 'GBPUSD',
+        magic: 1000,
+        time: new Date('2020-04-15T02:45:06.521Z'),
+        updateTime: new Date('2020-04-15T02:45:06.521Z'),
+        openPrice: 1.26101,
+        currentPrice: 1.24883,
+        currentTickValue: 1,
+        volume: 0.07,
+        swap: 0,
+        profit: -85.25999999999966,
+        commission: -0.25,
+        clientId: 'TE_GBPUSD_7hyINWqAlE',
+        stopLoss: 1.17721,
+        unrealizedProfit: -85.25999999999901,
+        realizedProfit: -6.536993168992922e-13
+      };
+      server.on('request', data => {
+        should(data.refreshTerminalState).be.undefined();
+        if (data.type === 'getPosition' && data.accountId === 'accountId' && data.positionId === '46214692' &&
+          data.application === 'RPC') {
+          server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, position});
+        }
+      });
+      let actual = await client.getPosition('accountId', '46214692');
+      actual.should.match(position);
     });
-    let actual = await client.getPosition('accountId', '46214692');
-    actual.should.match(position);
+
+    /**
+     * @test {MetaApiWebsocketClient#getPosition}
+     */
+    it('should set refresh terminal state flag if it is specified', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'getPosition', refreshTerminalState: true});
+        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId});
+      });
+      await client.getPosition('accountId', '123', {refreshTerminalState: true});
+    });
+
   });
 
   /**
    * @test {MetaApiWebsocketClient#getOrders}
    */
-  it('should retrieve MetaTrader orders from API', async () => {
-    let orders = [{
-      id: '46871284',
-      type: 'ORDER_TYPE_BUY_LIMIT',
-      state: 'ORDER_STATE_PLACED',
-      symbol: 'AUDNZD',
-      magic: 123456,
-      platform: 'mt5',
-      time: new Date('2020-04-20T08:38:58.270Z'),
-      openPrice: 1.03,
-      currentPrice: 1.05206,
-      volume: 0.01,
-      currentVolume: 0.01,
-      comment: 'COMMENT2'
-    }];
-    server.on('request', data => {
-      if (data.type === 'getOrders' && data.accountId === 'accountId' && data.application === 'RPC') {
-        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, orders});
-      }
+  describe('getOrders', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#getOrders}
+     */
+    it('should retrieve MetaTrader orders from API', async () => {
+      let orders = [{
+        id: '46871284',
+        type: 'ORDER_TYPE_BUY_LIMIT',
+        state: 'ORDER_STATE_PLACED',
+        symbol: 'AUDNZD',
+        magic: 123456,
+        platform: 'mt5',
+        time: new Date('2020-04-20T08:38:58.270Z'),
+        openPrice: 1.03,
+        currentPrice: 1.05206,
+        volume: 0.01,
+        currentVolume: 0.01,
+        comment: 'COMMENT2'
+      }];
+      server.on('request', data => {
+        should(data.refreshTerminalState).be.undefined();
+        if (data.type === 'getOrders' && data.accountId === 'accountId' && data.application === 'RPC') {
+          server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, orders});
+        }
+      });
+      let actual = await client.getOrders('accountId');
+      actual.should.match(orders);
     });
-    let actual = await client.getOrders('accountId');
-    actual.should.match(orders);
+
+    /**
+     * @test {MetaApiWebsocketClient#getOrders}
+     */
+    it('should set refresh terminal state flag if it is specified', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'getOrders', refreshTerminalState: true});
+        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId});
+      });
+      await client.getOrders('accountId', {refreshTerminalState: true});
+    });
+
   });
 
   /**
    * @test {MetaApiWebsocketClient#getOrder}
    */
-  it('should retrieve MetaTrader order from API by id', async () => {
-    let order = {
-      id: '46871284',
-      type: 'ORDER_TYPE_BUY_LIMIT',
-      state: 'ORDER_STATE_PLACED',
-      symbol: 'AUDNZD',
-      magic: 123456,
-      platform: 'mt5',
-      time: new Date('2020-04-20T08:38:58.270Z'),
-      openPrice: 1.03,
-      currentPrice: 1.05206,
-      volume: 0.01,
-      currentVolume: 0.01,
-      comment: 'COMMENT2'
-    };
-    server.on('request', data => {
-      if (data.type === 'getOrder' && data.accountId === 'accountId' && data.orderId === '46871284' &&
-        data.application === 'RPC') {
-        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, order});
-      }
+  describe('getOrder', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#getOrder}
+     */
+    it('should retrieve MetaTrader order from API by id', async () => {
+      let order = {
+        id: '46871284',
+        type: 'ORDER_TYPE_BUY_LIMIT',
+        state: 'ORDER_STATE_PLACED',
+        symbol: 'AUDNZD',
+        magic: 123456,
+        platform: 'mt5',
+        time: new Date('2020-04-20T08:38:58.270Z'),
+        openPrice: 1.03,
+        currentPrice: 1.05206,
+        volume: 0.01,
+        currentVolume: 0.01,
+        comment: 'COMMENT2'
+      };
+      server.on('request', data => {
+        should(data.refreshTerminalState).be.undefined();
+        if (data.type === 'getOrder' && data.accountId === 'accountId' && data.orderId === '46871284' &&
+          data.application === 'RPC') {
+          server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId, order});
+        }
+      });
+      let actual = await client.getOrder('accountId', '46871284');
+      actual.should.match(order);
     });
-    let actual = await client.getOrder('accountId', '46871284');
-    actual.should.match(order);
+
+    /**
+     * @test {MetaApiWebsocketClient#getOrder}
+     */
+    it('should set refresh terminal state flag if it is specified', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'getOrder', refreshTerminalState: true});
+        server.emit('response', {type: 'response', accountId: data.accountId, requestId: data.requestId});
+      });
+      await client.getOrder('accountId', '123', {refreshTerminalState: true});
+    });
+
   });
 
   /**
@@ -1132,6 +1229,57 @@ describe('MetaApiWebsocketClient', () => {
       }
     });
     await client.saveUptime('accountId', {'1h': 100});
+  });
+
+  /**
+   * @test {MetaApiWebsocketClient#refreshTerminalState}
+   */
+  describe('refreshTerminalState', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#refreshTerminalState}
+     */
+    it('should initiate refreshing terminal state and return symbols, initiated to refresh', async () => {
+      server.on('request', data => {
+        data.should.match({type: 'refreshTerminalState', application: 'RPC', accountId: 'accountId'});
+        server.emit('response', {
+          type: 'response', accountId: data.accountId, requestId: data.requestId,
+          symbols: ['EURUSD', 'BTCUSD']
+        });
+      });
+      should(await client.refreshTerminalState('accountId')).deepEqual(['EURUSD', 'BTCUSD']);
+    });
+
+  });
+
+  /**
+   * @test {MetaApiWebsocketClient#refreshTerminalState}
+   */
+  describe('refreshSymbolQuotes', () => {
+
+    /**
+     * @test {MetaApiWebsocketClient#refreshTerminalState}
+     */
+    it('should retrieve throttled quotes', async () => {
+      server.on('request', data => {
+        data.should.match({
+          type: 'refreshSymbolQuotes', application: 'RPC', accountId: 'accountId',
+          symbols: ['EURUSD', 'BTCUSD']
+        });
+        server.emit('response', {
+          type: 'response', accountId: data.accountId, requestId: data.requestId,
+          refreshedQuotes: {
+            quotes: [{symbol: 'EURUSD'}, {symbol: 'BTCUSD'}],
+            balance: 1100
+          }
+        });
+      });
+      should(await client.refreshSymbolQuotes('accountId', ['EURUSD', 'BTCUSD'])).deepEqual({
+        quotes: [{symbol: 'EURUSD'}, {symbol: 'BTCUSD'}],
+        balance: 1100
+      });
+    });
+
   });
 
   /**

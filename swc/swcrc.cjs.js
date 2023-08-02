@@ -8,7 +8,6 @@ module.exports = {
     'parser': {
       'syntax': 'ecmascript'
     },
-    'target': 'es5',
     'keepClassNames': true
   },
   'module': {
