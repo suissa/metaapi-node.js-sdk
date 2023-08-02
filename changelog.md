@@ -1,3 +1,7 @@
+23.5.0
+  - added `refreshTerminalState` and `refreshSymbolQuotes` methods
+  - fixed `MetatraderSymbolPrice.bid` property type
+
 23.4.1
  - added the request URL to the error log
  - added a detailed error log in the examples

@@ -2,8 +2,11 @@
 
 import randomstring from 'randomstring';
 import SynchronizationListener from '../clients/metaApi/synchronizationListener';
+import MetaApiWebsocketClient from '../clients/metaApi/metaApiWebsocket.client';
 import LoggerManager from '../logger';
 import TerminalHashManager from './terminalHashManager';
+import MetatraderAccount from './metatraderAccount';
+import {ConditionPromise} from '../helpers/promises';
 
 /**
  * Responsible for storing a local copy of remote terminal state
@@ -14,12 +17,14 @@ export default class TerminalState extends SynchronizationListener {
    * Constructs the instance of terminal state class
    * @param {MetatraderAccount} account mt account
    * @param {TerminalHashManager} terminalHashManager terminal hash manager
+   * @param {MetaApiWebsocketClient} websocketClient websocket client
    */
-  constructor(account, terminalHashManager) {
+  constructor(account, terminalHashManager, websocketClient) {
     super();
     this._id = randomstring.generate(32);
     this._account = account;
     this._terminalHashManager = terminalHashManager;
+    this._websocketClient = websocketClient;
     this._stateByInstanceIndex = {};
     this._waitForPriceResolves = {};
     this._combinedInstanceIndex = 'combined';
@@ -36,17 +41,17 @@ export default class TerminalState extends SynchronizationListener {
       ordersHash: null,
       ordersInitialized: false,
       positionsInitialized: false,
-      lastUpdateTime: 0,
       lastStatusTime: 0,
       lastQuoteTime: undefined,
       lastQuoteBrokerTime: undefined
     };
+    this._processThrottledQuotesCalls = {};
     this._logger = LoggerManager.getLogger('TerminalState');
     this._checkCombinedStateActivityJob = this._checkCombinedStateActivityJob.bind(this);
     setInterval(this._checkCombinedStateActivityJob, 5 * 60 * 1000);
   }
 
-  get id(){
+  get id() {
     return this._id;
   }
 
@@ -518,7 +523,6 @@ export default class TerminalState extends SynchronizationListener {
 
     // eslint-disable-next-line complexity,max-statements
     const updateSymbolPrices = (state) => {
-      state.lastUpdateTime = Math.max(prices.map(p => p.time.getTime()));
       let pricesInitialized = false;
       let priceUpdated = false;
       for (let price of prices || []) {
@@ -556,7 +560,7 @@ export default class TerminalState extends SynchronizationListener {
         }
         for (let order of orders) {
           order.currentPrice = order.type === 'ORDER_TYPE_BUY' || order.type === 'ORDER_TYPE_BUY_LIMIT' ||
-          order.type === 'ORDER_TYPE_BUY_STOP' || order.type === 'ORDER_TYPE_BUY_STOP_LIMIT' ? price.ask : price.bid;
+            order.type === 'ORDER_TYPE_BUY_STOP' || order.type === 'ORDER_TYPE_BUY_STOP_LIMIT' ? price.ask : price.bid;
         }
         let priceResolves = this._waitForPriceResolves[price.symbol] || [];
         if (priceResolves.length) {
@@ -591,6 +595,14 @@ export default class TerminalState extends SynchronizationListener {
     };
     updateSymbolPrices(instanceState);
     updateSymbolPrices(this._combinedState);
+    for (let price of prices) {
+      for (let call of Object.values(this._processThrottledQuotesCalls)) {
+        this._logger.trace(`${this._account.id}:${instanceIndex}: refreshed ${price.symbol} price`);
+        call.expectedSymbols?.delete(price.symbol);
+        call.receivedSymbols.add(price.symbol);
+        call.promise.check();
+      }
+    }
   }
 
   /**
@@ -612,6 +624,41 @@ export default class TerminalState extends SynchronizationListener {
           break;
         }
       }
+    }
+  }
+
+  /**
+   * Forces refresh of most recent quote updates for symbols subscribed to by the terminal, and waits for them all to
+   * be processed by this terminal state. This method does not waits for all other listeners to receive and process the
+   * quote updates
+   * @param {RefreshTerminalStateOptions} [options] additional options
+   * @returns {Promise} promise resolving when the terminal state received and processed the latest quotes
+   */
+  async refreshTerminalState(options) {
+    let callData = {
+      receivedSymbols: new Set()
+    };
+    let callId = randomstring.generate(8);
+    this._processThrottledQuotesCalls[callId] = callData;
+    callData.promise = new ConditionPromise(() => callData.expectedSymbols && !callData.expectedSymbols.size);
+    callData.promise.timeout(1000 * (options?.timeoutInSeconds ?? 10), 'refreshing terminal state timed out');
+    try {
+      let symbols = await Promise.race([
+        this._websocketClient.refreshTerminalState(this._account.id),
+        callData.promise // will only throw timeout error at this point
+      ]);
+      this._logger.debug(`${this._account.id}: expecting for ${symbols.length ? symbols : 0} symbols to refresh`);
+      let expectedSymbols = new Set();
+      for (let symbol of symbols) {
+        if (!callData.receivedSymbols.has(symbol)) {
+          expectedSymbols.add(symbol);
+        }
+      }
+      callData.expectedSymbols = expectedSymbols;
+      callData.promise.check();
+      await callData.promise;
+    } finally {
+      delete this._processThrottledQuotesCalls[callId];
     }
   }
 
@@ -643,7 +690,6 @@ export default class TerminalState extends SynchronizationListener {
       
       this._combinedState.ordersInitialized = false;
       this._combinedState.positionsInitialized = false;
-      this._combinedState.lastUpdateTime = 0;
       this._combinedState.lastStatusTime = 0;
       this._combinedState.lastQuoteTime = undefined;
       this._combinedState.lastQuoteBrokerTime = undefined;
@@ -733,7 +779,6 @@ export default class TerminalState extends SynchronizationListener {
       pricesBySymbol: {},
       ordersInitialized: false,
       positionsInitialized: false,
-      lastUpdateTime: 0,
       lastSyncUpdateTime: 0,
       positionsHash: null,
       ordersHash: null,

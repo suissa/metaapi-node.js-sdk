@@ -1,5 +1,6 @@
 'use strict';
 
+import MetaApiWebsocketClient from '../clients/metaApi/metaApiWebsocket.client';
 import LoggerManager from '../logger';
 import randomstring from 'randomstring';
 
@@ -24,12 +25,17 @@ export default class MetaApiConnectionInstance {
    * Opens the connection. Can only be called the first time, next calls will be ignored.
    * @return {Promise} promise resolving when the connection is opened
    */
-  async connect() {}
+  async connect() {
+    this._opened = true;
+  }
 
   /**
    * Closes the connection. The instance of the class should no longer be used after this method is invoked.
    */
-  async close() {}
+  async close() {
+    this._opened = false;
+    this._closed = true;
+  }
   
   /**
    * Common trade options
@@ -139,7 +145,7 @@ export default class MetaApiConnectionInstance {
    */
 
   /**
-   * Creates a market buy order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a market buy order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number|StopOptions} [stopLoss] stop loss price
@@ -155,7 +161,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a market sell order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a market sell order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number|StopOptions} [stopLoss] stop loss price
@@ -171,7 +177,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a limit buy order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a limit buy order
    * @param {String} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order limit price
@@ -188,7 +194,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a limit sell order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a limit sell order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order limit price
@@ -205,7 +211,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a stop buy order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a stop buy order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order stop price
@@ -222,7 +228,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a stop sell order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a stop sell order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order stop price
@@ -239,7 +245,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a stop limit buy order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a stop limit buy order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order stop price
@@ -257,7 +263,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Creates a stop limit sell order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Creates a stop limit sell order
    * @param {string} symbol symbol to trade
    * @param {number} volume order volume
    * @param {number} openPrice order stop price
@@ -275,7 +281,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Modifies a position (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Modifies a position
    * @param {string} positionId position id to modify
    * @param {number|StopOptions} [stopLoss] stop loss price
    * @param {number|StopOptions} [takeProfit] take profit price
@@ -292,7 +298,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Partially closes a position (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Partially closes a position
    * @param {string} positionId position id to modify
    * @param {number} volume volume to close
    * @param {MarketTradeOptions} options optional trade options
@@ -306,7 +312,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Fully closes a position (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Fully closes a position
    * @param {string} positionId position id to modify
    * @param {MarketTradeOptions} options optional trade options
    * @returns {Promise<TradeResponse>} promise resolving with trade result
@@ -319,7 +325,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Fully closes a position (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Fully closes a position
    * @param {string} positionId position id to close by opposite position
    * @param {string} oppositePositionId opposite position id to close
    * @param {MarketTradeOptions} options optional trade options
@@ -333,7 +339,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Closes positions by a symbol(see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Closes positions by a symbol
    * @param {string} symbol symbol to trade
    * @param {MarketTradeOptions} options optional trade options
    * @returns {Promise<TradeResponse>} promise resolving with trade result
@@ -346,7 +352,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Modifies a pending order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Modifies a pending order
    * @param {string} orderId order id (ticket number)
    * @param {number} openPrice order stop price
    * @param {number|StopOptions} [stopLoss] stop loss price
@@ -362,7 +368,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Cancels order (see https://metaapi.cloud/docs/client/websocket/api/trade/).
+   * Cancels order
    * @param {string} orderId order id (ticket number)
    * @returns {Promise<TradeResponse>} promise resolving with trade result
    * @throws {TradeError} on trade error, check error properties for error code details
@@ -378,8 +384,7 @@ export default class MetaApiConnectionInstance {
   }
 
   /**
-   * Calculates margin required to open a trade on the specified trading account (see
-   * https://metaapi.cloud/docs/client/websocket/api/calculateMargin/).
+   * Calculates margin required to open a trade on the specified trading account
    * @param {MarginOrder} order order to calculate margin for
    * @returns {Promise<Margin>} promise resolving with margin calculation result
    */
@@ -387,6 +392,19 @@ export default class MetaApiConnectionInstance {
     this._checkIsConnectionActive();
     return this._websocketClient.calculateMargin(this._metaApiConnection.account.id,
       this._metaApiConnection.application, this._metaApiConnection.account.reliability, order);
+  }
+
+  /**
+   * Forces refresh and retrieves latest quotes for a subset of symbols the terminal is subscribed to. Note, that this
+   * method works separately from the streamed data (for streaming connection), so the response may be obsolete already,
+   * if some updates happen during the request
+   * @param {string[]} symbols quote symbols to refresh
+   * @returns {Promise<RefreshedQuotes>} quotes that was actually updated (a subset of specified symbols), and some of
+   * basic account information
+   */
+  refreshSymbolQuotes(symbols) {
+    this._checkIsConnectionActive();
+    return this._websocketClient.refreshSymbolQuotes(this._metaApiConnection.account.id, symbols);
   }
 
   /**

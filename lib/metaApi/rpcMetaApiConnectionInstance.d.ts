@@ -1,4 +1,8 @@
-import MetaApiWebsocketClient, { MetatraderAccountInformation, MetatraderCandle, MetatraderDeals, MetatraderHistoryOrders, MetatraderOrder, MetatraderPosition, MetatraderSymbolPrice, MetatraderSymbolSpecification, MetatraderTick, ServerTime } from "../clients/metaApi/metaApiWebsocket.client";
+import MetaApiWebsocketClient, {
+  GetAccountInformationOptions, GetOrderOptions, GetOrdersOptions, GetPositionOptions, GetPositionsOptions,
+  MetatraderAccountInformation, MetatraderCandle, MetatraderDeals, MetatraderHistoryOrders, MetatraderOrder,
+  MetatraderPosition, MetatraderSymbolPrice, MetatraderSymbolSpecification, MetatraderTick, ServerTime
+} from '../clients/metaApi/metaApiWebsocket.client';
 import MetaApiConnectionInstance from './metaApiConnectionInstance';
 import StreamingMetaApiConnection from './streamingMetaApiConnection';
 
@@ -15,61 +19,58 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   constructor(websocketClient: MetaApiWebsocketClient, metaApiConnection: StreamingMetaApiConnection);
   
   /**
-   * Returns account information (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readAccountInformation/).
+   * Returns account information
+   * @param {GetAccountInformationOptions} [options] additional request options
    * @returns {Promise<MetatraderAccountInformation>} promise resolving with account information
    */
-  getAccountInformation(): Promise<MetatraderAccountInformation>;
+  getAccountInformation(options?: GetAccountInformationOptions): Promise<MetatraderAccountInformation>;
   
   /**
-   * Returns positions (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPositions/).
+   * Returns positions
+   * @param {GetPositionsOptions} [options] additional request options
    * @returns {Promise<Array<MetatraderPosition>} promise resolving with array of open positions
    */
-  getPositions(): Promise<Array<MetatraderPosition>>;
+  getPositions(options?: GetPositionsOptions): Promise<Array<MetatraderPosition>>;
   
   /**
-   * Returns specific position (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPosition/).
+   * Returns specific position
    * @param {string} positionId position id
+   * @param {GetPositionOptions} [options] additional request options
    * @return {Promise<MetatraderPosition>} promise resolving with MetaTrader position found
    */
-  getPosition(positionId: string): Promise<MetatraderPosition>;
+  getPosition(positionId: string, options?: GetPositionOptions): Promise<MetatraderPosition>;
   
   /**
-   * Returns open orders (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrders/).
+   * Returns open orders
+   * @param {GetOrdersOptions} [options] additional request options
    * @return {Promise<Array<MetatraderOrder>>} promise resolving with open MetaTrader orders
    */
-  getOrders(): Promise<Array<MetatraderOrder>>;
+  getOrders(options?: GetOrdersOptions): Promise<Array<MetatraderOrder>>;
   
   /**
-   * Returns specific open order (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrder/).
+   * Returns specific open order
    * @param {string} orderId order id (ticket number)
+   * @param {GetOrderOptions} [options] additional request options
    * @return {Promise<MetatraderOrder>} promise resolving with metatrader order found
    */
-  getOrder(orderId: string): Promise<MetatraderOrder>;
+  getOrder(orderId: string, options?: GetOrderOptions): Promise<MetatraderOrder>;
   
   /**
-   * Returns the history of completed orders for a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTicket/).
+   * Returns the history of completed orders for a specific ticket number
    * @param {string} ticket ticket number (order id)
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
    */
   getHistoryOrdersByTicket(ticket: string): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns the history of completed orders for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByPosition/)
+   * Returns the history of completed orders for a specific position id
    * @param {string} positionId position id
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
    */
   getHistoryOrdersByPosition(positionId: string): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns the history of completed orders for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTimeRange/)
+   * Returns the history of completed orders for a specific time range
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
    * @param {number} offset pagination offset, default is 0
@@ -79,24 +80,21 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getHistoryOrdersByTimeRange(startTime: Date, endTime: Date, offset?: number, limit?: number): Promise<MetatraderHistoryOrders>;
   
   /**
-   * Returns history deals with a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTicket/).
+   * Returns history deals with a specific ticket number
    * @param {string} ticket ticket number (deal id for MT5 or order id for MT4)
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
    */
   getDealsByTicket(ticket: string): Promise<MetatraderDeals>;
   
   /**
-   * Returns history deals for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByPosition/).
+   * Returns history deals for a specific position id
    * @param {string} positionId position id
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
    */
   getDealsByPosition(positionId: string): Promise<MetatraderDeals>;
   
   /**
-   * Returns history deals with for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTimeRange/).
+   * Returns history deals with for a specific time range
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
    * @param {number} offset pagination offset, default is 0
@@ -106,23 +104,20 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getDealsByTimeRange(startTime: Date, endTime: Date, offset?: number, limit?: number): Promise<MetatraderDeals>;
   
   /**
-   * Retrieves available symbols for an account (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbols/).
+   * Retrieves available symbols for an account
    * @returns {Promise<Array<string>>} promise which resolves when symbols are retrieved
    */
   getSymbols(): Promise<Array<string>>;
   
   /**
-   * Retrieves specification for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolSpecification/).
+   * Retrieves specification for a symbol
    * @param {string} symbol symbol to retrieve specification for
    * @returns {Promise<MetatraderSymbolSpecification>} promise which resolves when specification is retrieved
    */
   getSymbolSpecification(symbol: string): Promise<MetatraderSymbolSpecification>;
   
   /**
-   * Retrieves latest price for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolPrice/).
+   * Retrieves latest price for a symbol
    * @param {string} symbol symbol to retrieve price for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -132,8 +127,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getSymbolPrice(symbol: string, keepSubscription: boolean): Promise<MetatraderSymbolPrice>;
   
   /**
-   * Retrieves latest candle for a symbol and timeframe (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readCandle/).
+   * Retrieves latest candle for a symbol and timeframe
    * @param {string} symbol symbol to retrieve candle for
    * @param {string} timeframe defines the timeframe according to which the candle must be generated. Allowed values for
    * MT5 are 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d, 1w, 1mn. Allowed values
@@ -146,8 +140,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getCandle(symbol: string, timeframe: string, keepSubscription?: boolean): Promise<MetatraderCandle>;
   
   /**
-   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readTick/).
+   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API
    * @param {string} symbol symbol to retrieve tick for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -157,8 +150,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getTick(symbol: string, keepSubscription?: boolean): Promise<MetatraderTick>;
   
   /**
-   * Retrieves latest order book for a symbol. MT4 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readBook/).
+   * Retrieves latest order book for a symbol. MT4 accounts do not support this API
    * @param {string} symbol symbol to retrieve order book for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -168,8 +160,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   getBook(symbol: string, keepSubscription?: boolean): Promise<MetatraderTick>;
 
   /**
-   * Returns server time for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readServerTime/).
+   * Returns server time for a specified MetaTrader account
    * @returns {Promise<ServerTime>} promise resolving with server time
    */
   getServerTime(): Promise<ServerTime>;

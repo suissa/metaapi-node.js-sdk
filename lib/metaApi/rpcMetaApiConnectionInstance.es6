@@ -1,4 +1,5 @@
 'use strict';
+
 import LoggerManager from '../logger';
 import MetaApiConnectionInstance from './metaApiConnectionInstance';
 
@@ -40,60 +41,59 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns account information (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readAccountInformation/).
+   * Returns account information
+   * @param {GetAccountInformationOptions} [options] additional request options
    * @returns {Promise<MetatraderAccountInformation>} promise resolving with account information
    */
-  getAccountInformation() {
+  getAccountInformation(options) {
     this._checkIsConnectionActive();
-    return this._websocketClient.getAccountInformation(this._metaApiConnection.account.id);
+    return this._websocketClient.getAccountInformation(this._metaApiConnection.account.id, options);
   }
 
   /**
-   * Returns positions (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPositions/).
+   * Returns positions
+   * @param {GetPositionsOptions} [options] additional request options
    * @returns {Promise<Array<MetatraderPosition>} promise resolving with array of open positions
    */
-  getPositions() {
+  getPositions(options) {
     this._checkIsConnectionActive();
-    return this._websocketClient.getPositions(this._metaApiConnection.account.id);
+    return this._websocketClient.getPositions(this._metaApiConnection.account.id, options);
   }
 
   /**
-   * Returns specific position (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readPosition/).
+   * Returns specific position
    * @param {String} positionId position id
+   * @param {GetPositionOptions} [options] additional request options
    * @return {Promise<MetatraderPosition>} promise resolving with MetaTrader position found
    */
-  getPosition(positionId) {
+  getPosition(positionId, options) {
     this._checkIsConnectionActive();
-    return this._websocketClient.getPosition(this._metaApiConnection.account.id, positionId);
+    return this._websocketClient.getPosition(this._metaApiConnection.account.id, positionId, options);
   }
 
   /**
-   * Returns open orders (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrders/).
+   * Returns open orders
+   * @param {GetOrdersOptions} [options] additional request options
    * @return {Promise<Array<MetatraderOrder>>} promise resolving with open MetaTrader orders
    */
-  getOrders() {
+  getOrders(options) {
     this._checkIsConnectionActive();
-    return this._websocketClient.getOrders(this._metaApiConnection.account.id);
+    return this._websocketClient.getOrders(this._metaApiConnection.account.id, options);
   }
 
   /**
-   * Returns specific open order (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readOrder/).
+   * Returns specific open order
    * @param {String} orderId order id (ticket number)
+   * @param {GetOrderOptions} [options] additional request options
    * @return {Promise<MetatraderOrder>} promise resolving with metatrader order found
    */
-  getOrder(orderId) {
+  getOrder(orderId, options) {
     this._checkIsConnectionActive();
-    return this._websocketClient.getOrder(this._metaApiConnection.account.id, orderId);
+    return this._websocketClient.getOrder(this._metaApiConnection.account.id, orderId, options);
   }
 
   /**
-   * Returns the history of completed orders for a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTicket/).
+   * Returns the history of completed orders for a specific ticket number
    * @param {String} ticket ticket number (order id)
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
    */
@@ -103,8 +103,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns the history of completed orders for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByPosition/)
+   * Returns the history of completed orders for a specific position id
    * @param {String} positionId position id
    * @returns {Promise<MetatraderHistoryOrders>} promise resolving with request results containing history orders found
    */
@@ -114,8 +113,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns the history of completed orders for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readHistoryOrdersByTimeRange/)
+   * Returns the history of completed orders for a specific time range
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
    * @param {Number} offset pagination offset, default is 0
@@ -129,8 +127,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns history deals with a specific ticket number (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTicket/).
+   * Returns history deals with a specific ticket number
    * @param {String} ticket ticket number (deal id for MT5 or order id for MT4)
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
    */
@@ -140,8 +137,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns history deals for a specific position id (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByPosition/).
+   * Returns history deals for a specific position id
    * @param {String} positionId position id
    * @returns {Promise<MetatraderDeals>} promise resolving with request results containing deals found
    */
@@ -151,8 +147,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns history deals with for a specific time range (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveHistoricalData/readDealsByTimeRange/).
+   * Returns history deals with for a specific time range
    * @param {Date} startTime start of time range, inclusive
    * @param {Date} endTime end of time range, exclusive
    * @param {Number} offset pagination offset, default is 0
@@ -166,8 +161,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves available symbols for an account (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbols/).
+   * Retrieves available symbols for an account
    * @param {String} symbol symbol to retrieve symbols for
    * @returns {Promise<Array<string>>} promise which resolves when symbols are retrieved
    */
@@ -177,8 +171,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves specification for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolSpecification/).
+   * Retrieves specification for a symbol
    * @param {String} symbol symbol to retrieve specification for
    * @returns {Promise<MetatraderSymbolSpecification>} promise which resolves when specification is retrieved
    */
@@ -188,8 +181,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves latest price for a symbol (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readSymbolPrice/).
+   * Retrieves latest price for a symbol
    * @param {String} symbol symbol to retrieve price for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -202,8 +194,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves latest candle for a symbol and timeframe (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readCandle/).
+   * Retrieves latest candle for a symbol and timeframe
    * @param {String} symbol symbol to retrieve candle for
    * @param {string} timeframe defines the timeframe according to which the candle must be generated. Allowed values for
    * MT5 are 1m, 2m, 3m, 4m, 5m, 6m, 10m, 12m, 15m, 20m, 30m, 1h, 2h, 3h, 4h, 6h, 8h, 12h, 1d, 1w, 1mn. Allowed values
@@ -219,8 +210,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readTick/).
+   * Retrieves latest tick for a symbol. MT4 G1 accounts do not support this API
    * @param {String} symbol symbol to retrieve tick for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -233,8 +223,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Retrieves latest order book for a symbol. MT4 accounts do not support this API (see
-   * https://metaapi.cloud/docs/client/websocket/api/retrieveMarketData/readBook/).
+   * Retrieves latest order book for a symbol. MT4 accounts do not support this API
    * @param {string} symbol symbol to retrieve order book for
    * @param {boolean} keepSubscription if set to true, the account will get a long-term subscription to symbol market
    * data. Long-term subscription means that on subsequent calls you will get updated value faster. If set to false or
@@ -247,8 +236,7 @@ export default class RpcMetaApiConnectionInstance extends MetaApiConnectionInsta
   }
 
   /**
-   * Returns server time for a specified MetaTrader account (see
-   * https://metaapi.cloud/docs/client/websocket/api/readTradingTerminalState/readServerTime/).
+   * Returns server time for a specified MetaTrader account
    * @returns {Promise<ServerTime>} promise resolving with server time
    */
   async getServerTime() {

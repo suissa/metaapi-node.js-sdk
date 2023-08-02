@@ -1,3 +1,5 @@
+'use strict';
+
 import MetaAPI from '../index';
 import fs from 'fs-extra';
 
@@ -8,7 +10,7 @@ let login = process.env.LOGIN;
 let password = process.env.PASSWORD;
 let serverName = process.env.SERVER;
 let serverDatFile = process.env.PATH_TO_SERVERS_DAT;
-const api = new MetaAPI(token, {application: 'MetaApi', domain: 'project-stock.v3.agiliumlabs.cloud'});
+const api = new MetaAPI(token, {application: 'MetaApi', domain: 'agiliumtrade.agiliumlabs.cloud'});
 
 describe('MT5 double synchronization test', () => {
 

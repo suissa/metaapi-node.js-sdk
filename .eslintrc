@@ -90,7 +90,9 @@
         "dot-notation": ["error"],
         "no-new-func": ["error"],
         "no-new-object": ["error"],
-        "mocha/no-mocha-arrows": ["off"]
+        "mocha/no-mocha-arrows": ["off"],
+        "mocha/no-setup-in-describe": ["off"],
+        "mocha/no-hooks-for-single-case": ["off"]
     },
     "plugins": [
         "mocha"
