@@ -5,9 +5,15 @@
 
 # MetaApi Integration with Vue 3
 
-Example of integration of MetaApi with Vue 3 application.
-
 You can look at a demo of these examples [here](https://youtu.be/MQSOU7DK1J4).
+
+## Table of contents
+
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Using](#using)
+4. [Examples](#examples)
+5. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
@@ -102,14 +108,14 @@ async function fetchData() {
 
 ## Examples
 
-Integration examples are located in the [`./vue-app/`](./vue-app/) directory.
+Integration examples are located in the [`examples/vue/vue-app/`](../../examples/vue/vue-app/) directory.
 
-- Historical Market Data: [src/components/historical/](./vue-app/src/components/historical)
-- RiskManagement: [src/components/risk-management/](./vue-app/src/components/risk-management)
-- Stream Quotes: [src/components/stream-quotes](./vue-app/src/components/stream-quotes)
-- CopyFactory: [src/components/copy-factory/](./vue-app/src/components/copy-factory)
-- MetaStats: [src/components/meta-stats/](./vue-app/src/components/meta-stats)
-- MetaApi: [src/components/meta-api/](./vue-app/src/components/meta-api)
+- Historical Market Data: [src/components/historical/](../../examples/vue/vue-app/src/components/historical)
+- RiskManagement: [src/components/risk-management/](../../examples/vue/vue-app/src/components/risk-management)
+- Stream Quotes: [src/components/stream-quotes](../../examples/vue/vue-app/src/components/stream-quotes)
+- CopyFactory: [src/components/copy-factory/](../../examples/vue/vue-app/src/components/copy-factory)
+- MetaStats: [src/components/meta-stats/](../../examples/vue/vue-app/src/components/meta-stats)
+- MetaApi: [src/components/meta-api/](../../examples/vue/vue-app/src/components/meta-api)
 
 ### Prerequisites of examples
 
@@ -129,7 +135,7 @@ cd metaapi-node.js-sdk/examples/vue/vue-app/
 
 ```bash
 npm install
-npm run dev 
+npm run dev
 # runned at localhost:5173
 ```
 
@@ -149,13 +155,6 @@ Or use `docker-compose`:
 docker-compose up 
 # runned at localhost:5173 
 ```
-
-## More integration 
-
-- [Browser](./../browser)
-- [Angular](./../angular)
-- [NodeJS](./../node)
-- [React](./../react)
 
 ## Troubleshooting
 

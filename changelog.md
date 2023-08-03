@@ -1,3 +1,6 @@
+23.5.1
+ - added docs for ui integration
+
 23.5.0
   - added `refreshTerminalState` and `refreshSymbolQuotes` methods
   - fixed `MetatraderSymbolPrice.bid` property type

@@ -1,13 +1,19 @@
-<div align="center">
+ <div align="center">
   <img src="https://metaapi.cloud/favicon.ico" alt="Logo-MetaApi" width="50" height="50"/> 
   <img src="https://angular.io/assets/images/favicons/favicon.ico" alt="Logo-Angular" width="50" height="50"/>
 </div>
 
 # MetaApi Integration with Angular
 
-Example of integration of MetaApi with Angular application.
-
 You can look at a demo of these examples [here](https://youtu.be/O4XmyMh1ozg).
+
+## Table of contents
+
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Using](#using)
+4. [Examples](#examples)
+5. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
@@ -118,14 +124,14 @@ export class AppComponent {
 
 ## Examples
 
-Integration examples are located in the [`./angular-app/`](./angular-app/) directory.
+Integration examples are located in the [`examples/angular/angular-app/`](../../examples/angular/angular-app/) directory.
 
-- Historical Market Data: [src/app/historical/](./angular-app/src/app/historical)
-- RiskManagement: [src/app/risk-management/](./angular-app/src/app/risk-management)
-- Stream Quotes: [src/app/stream-quotes](./angular-app/src/app/stream-quotes)
-- CopyFactory: [src/app/copy-factory/](./angular-app/src/app/copy-factory)
-- MetaStats: [src/app/meta-stats/](./angular-app/src/app/meta-stats)
-- MetaApi: [src/app/meta-api/](./angular-app/src/app/meta-api)
+- Historical Market Data: [src/app/historical/](../../examples/angular/angular-app/src/app/historical)
+- RiskManagement: [src/app/risk-management/](../../examples/angular/angular-app/src/app/risk-management)
+- Stream Quotes: [src/app/stream-quotes](../../examples/angular/angular-app/src/app/stream-quotes)
+- CopyFactory: [src/app/copy-factory/](../../examples/angular/angular-app/src/app/copy-factory)
+- MetaStats: [src/app/meta-stats/](../../examples/angular/angular-app/src/app/meta-stats)
+- MetaApi: [src/app/meta-api/](../../examples/angular/angular-app/src/app/meta-api)
 
 ### Installation and Running
 
@@ -160,13 +166,6 @@ Or use `docker-compose`:
 docker-compose up
 # runned at localhost:4200
 ```
-
-## More integration
-
-- [Browser](./../browser)
-- [NodeJS](./../node)
-- [React](./../react)
-- [Vue](./../vue)
 
 ## Troubleshooting
 

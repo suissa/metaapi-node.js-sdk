@@ -34,14 +34,22 @@ npm install --save metaapi.cloud-sdk
 npm install --save metaapi.cloud-sdk
 ```
 
+Examples of integration with : 
+
+1. [Angular](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/ui/angular.md)
+2. [React](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/ui/react.md)
+3. [Vue](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/ui/vue.md)
+
 ## Installing SDK in browser HTML applications
 ```html
-<script src="unpkg.com/metaapi.cloud-sdk/index.js"></script>
+<script src="unpkg.com/metaapi.cloud-sdk"></script>
 <script>
-    const token = '...';
-    const api = new MetaApi(token);
+  const token = '...';
+  const api = new MetaApi.default(token);
 </script>
 ```
+
+Details of [integration into HTML](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/ui/html.md). 
 
 ## Connecting to MetaApi
 Please use one of these ways: 
@@ -90,3 +98,5 @@ Alternatively, you can retrieve account access token via web UI on https://app.m
 10. [Rate limits & quotas](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/rateLimits.md)
 
 11. [Token Management API](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/tokenManagementApi.md)
+
+12. [Intergration for Web UI](https://github.com/agiliumtrade-ai/metaapi-node.js-sdk/blob/master/docs/ui/index.md)

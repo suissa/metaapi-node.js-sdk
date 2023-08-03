@@ -5,9 +5,15 @@
 
 # MetaApi Integration with React
 
-Integration MetaApi SDK with React.
-
 You can look at a demo of these examples [here](https://youtu.be/7Ka-XGuIInA).
+
+## Table of contents
+
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Using](#using)
+4. [Examples](#examples)
+5. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
@@ -146,14 +152,14 @@ export default MyComponent;
 
 ## Examples
 
-Integration examples are located in the [`./react-app/`](./react-app/) directory.
+Integration examples are located in the [`examples/react/react-app/`](../../examples/react/react-app/) directory.
 
-- Historical Market Data: [src/components/historical/](./react-app/src/components/historical)
-- RiskManagement: [src/components/risk-management/](./react-app/src/components/risk-management)
-- Stream Quotes: [src/components/stream-quotes](./react-app/src/components/stream-quotes)
-- CopyFactory: [src/components/copy-factory/](./react-app/src/components/copy-factory)
-- MetaStats: [src/components/meta-stats/](./react-app/src/components/meta-stats)
-- MetaApi: [src/components/meta-api/](./react-app/src/components/meta-api)
+- Historical Market Data: [src/components/historical/](../../examples/react/react-app/src/components/historical)
+- RiskManagement: [src/components/risk-management/](../../examples/react/react-app/src/components/risk-management)
+- Stream Quotes: [src/components/stream-quotes](../../examples/react/react-app/src/components/stream-quotes)
+- CopyFactory: [src/components/copy-factory/](../../examples/react/react-app/src/components/copy-factory)
+- MetaStats: [src/components/meta-stats/](../../examples/react/react-app/src/components/meta-stats)
+- MetaApi: [src/components/meta-api/](../../examples/react/react-app/src/components/meta-api)
 
 ### Prerequisites of examples
 
@@ -193,13 +199,6 @@ Or use `docker-compose`:
 docker-compose up
 # runned at localhost:5173
 ```
-
-## More integration 
-
-- [Browser](./../browser)
-- [Angular](./../angular)
-- [NodeJS](./../node)
-- [Vue](./../vue)
 
 ## Troubleshooting
 
