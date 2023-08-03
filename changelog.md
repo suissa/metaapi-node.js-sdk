@@ -1,4 +1,4 @@
-23.5.1
+23.5.1, 23.5.2
  - added docs for ui integration
 
 23.5.0

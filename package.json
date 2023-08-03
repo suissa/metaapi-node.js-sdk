@@ -45,7 +45,7 @@
     "type": "git",
     "url": "https://github.com/agiliumtrade-ai/metaapi-node.js-sdk.git"
   },
-  "version": "23.5.1",
+  "version": "23.5.2",
   "dependencies": {
     "@log4js-node/log4js-api": "~1.0.2",
     "axios": "~1.4.0",
@@ -114,7 +114,8 @@
     "build:types": "copyfiles -u 1 \"lib/**/*.d.ts\" build/esm && copyfiles -u 1 \"lib/**/*.d.ts\" build/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dists/cjs && copyfiles -u 1 \"lib/**/*.d.ts\" dists/esm && copyfiles -u 1 \"lib/**/*.d.ts\" dists/umd",
     "build:backward-compatiibility": "copyfiles -u 2 \"build/cjs/**/*\" dist/",
     "clean-win": "(if exist dist rmdir /Q /S dist) && (if exist build rmdir /Q /S build) && (if exist dists rmdir /Q /S dists)",
-    "clean": "rm -rf build; rm -rf dist; rm -rf dists;"
+    "clean": "rm -rf build; rm -rf dist; rm -rf dists;",
+    "preinstall": "node preinstall.js"
   },
   "module": "./dists/esm/index.js",
   "unpkg": "./dists/umd/index.js",
